@@ -11,7 +11,6 @@ import {
   IonPage,
   IonProgressBar,
   IonRow,
-  IonSkeletonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -75,10 +74,9 @@ const PageHome: React.FC = () => {
               <IonRow>
                 <IonCol>Fälle</IonCol>
                 <IonCol>
-                  {state.temp.cache.data ? (
-                    displayValue(state.temp.cache.data.germany.cases)
-                  ) : (
-                    <IonSkeletonText />
+                  {showOrSkeleton(
+                    state.temp.cache.data?.germany.cases,
+                    displayValue
                   )}
                 </IonCol>
               </IonRow>
