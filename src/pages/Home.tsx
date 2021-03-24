@@ -14,16 +14,13 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AppContext } from "../db/Store";
-import { cacheDataFromAPI } from "../functions/data";
 import { displayValue, showOrSkeleton } from "../functions/rendering";
 
 const PageHome: React.FC = () => {
-  const { state, dispatch } = useContext(AppContext);
-  useEffect(() => {
-    cacheDataFromAPI(dispatch);
-  }, []); // eslint-disable-line
+  const { state } = useContext(AppContext);
+
   return (
     <IonPage>
       <IonHeader translucent>
