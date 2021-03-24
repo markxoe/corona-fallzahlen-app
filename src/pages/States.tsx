@@ -44,7 +44,7 @@ const PageStates: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton />
+            <IonBackButton routerAnimation={undefined} defaultHref="/home" />
           </IonButtons>
           <IonTitle>Bundesländer</IonTitle>
         </IonToolbar>

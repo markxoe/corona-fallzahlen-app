@@ -54,7 +54,7 @@ const PageDistricts: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton />
+            <IonBackButton defaultHref="/home" />
           </IonButtons>
           <IonTitle>Landkreise</IonTitle>
         </IonToolbar>

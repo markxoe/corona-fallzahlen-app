@@ -28,30 +28,24 @@ import { AppContextProvider } from "./db/Store";
 import PageHome from "./pages/Home";
 import PageStates from "./pages/States";
 import PageDistricts from "./pages/Districts";
+import Loader from "./db/loadingComponent";
 
 const App: React.FC = () => (
   <AppContextProvider>
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/home">
-            <PageHome />
-          </Route>
-
-          <Route>
-            <Redirect to="/home" />
-          </Route>
-
-          <Route exact path="/states">
-            <PageStates />
-          </Route>
-
-          <Route exact path="/districts">
-            <PageDistricts />
-          </Route>
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
+    <Loader>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+            <Route exact path="/home" component={PageHome} />
+            <Route exact path="/states" component={PageStates} />
+            <Route exact path="/districts" component={PageDistricts} />
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
+    </Loader>
   </AppContextProvider>
 );
 
