@@ -1,0 +1,7 @@
+{
+  "name": "Corona Fallzahlen",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

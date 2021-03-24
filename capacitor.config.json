@@ -1,0 +1,13 @@
+{
+  "appId": "org.toastbrot.covidcases",
+  "appName": "Corona Fallzahlen",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

@@ -1,0 +1,10 @@
+ion-card ion-grid {
+  color: var(--ion-color-dark);
+}
+
+.lil-img-padding {
+  padding: 10px 50px;
+  max-height: 250px;
+  display: block;
+  margin: auto;
+}
