@@ -2,6 +2,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardSubtitle,
   IonCardTitle,
   IonCol,
   IonContent,
@@ -17,6 +18,8 @@ import {
 import { useContext } from "react";
 import { AppContext } from "../db/Store";
 import { displayValue, showOrSkeleton } from "../functions/rendering";
+
+import packageJSON from "../../package.json";
 
 const PageHome: React.FC = () => {
   const { state } = useContext(AppContext);
@@ -171,16 +174,23 @@ const PageHome: React.FC = () => {
                   Entscheidungen verwendet werden
                 </IonCol>
               </IonRow>
-              <IonRow>
-                <IonCol>
-                  Fehler gefunden? Verbesserungsvorschläge? Diese App ist
-                  OpenSource!{" "}
-                  <a href="https://github.com/markxoe/corona-fallzahlen-app">
-                    Zum Projekt
-                  </a>
-                </IonCol>
-              </IonRow>
             </IonGrid>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Über</IonCardTitle>
+            <IonCardSubtitle>Über die App</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <p>
+              Fehler gefunden? Verbesserungsvorschläge? Diese App ist
+              OpenSource!{" "}
+              <a href="https://github.com/markxoe/corona-fallzahlen-app">
+                Zum Projekt
+              </a>
+            </p>
+            <p>App Version: {packageJSON.version}</p>
           </IonCardContent>
         </IonCard>
       </IonContent>
