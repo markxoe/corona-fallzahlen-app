@@ -8,7 +8,7 @@ export const initialState: StateType = {
     loading: true,
     cache: {},
   },
-  favorites: ["BY", "09562"],
+  favorites: [],
 };
 
 const reducer = (state: StateType, action: ActionType): StateType => {
