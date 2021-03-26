@@ -10,3 +10,13 @@ export const ActionSetTempCache = (cache: APICacheType): ActionType => ({
   type: "setTempCache",
   payload: cache,
 });
+
+export const ActionAddFavorite = (name: string): ActionType => ({
+  type: "addFavorite",
+  payload: name,
+});
+
+export const ActionRemoveFavorite = (name: string): ActionType => ({
+  type: "removeFavorite",
+  payload: name,
+});

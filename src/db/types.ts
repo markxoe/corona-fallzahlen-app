@@ -3,6 +3,7 @@ import { APICacheType } from "../api/types";
 
 export interface StateType {
   temp: TempType;
+  favorites: (string | number)[];
 }
 
 export interface ContextType {

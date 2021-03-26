@@ -8,6 +8,7 @@ export const initialState: StateType = {
     loading: true,
     cache: {},
   },
+  favorites: ["BY", "09562"],
 };
 
 const reducer = (state: StateType, action: ActionType): StateType => {
@@ -17,6 +18,15 @@ const reducer = (state: StateType, action: ActionType): StateType => {
     }
     case "setTempCache": {
       return { ...state, temp: { ...state.temp, cache: action.payload } };
+    }
+    case "addFavorite": {
+      return { ...state, favorites: [...state.favorites, action.payload] };
+    }
+    case "removeFavorite": {
+      return {
+        ...state,
+        favorites: state.favorites.filter((i) => i !== action.payload),
+      };
     }
   }
   return state;
