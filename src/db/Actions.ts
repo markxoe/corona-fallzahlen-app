@@ -1,5 +1,5 @@
 import { APICacheType } from "../api/types";
-import { ActionType } from "./types";
+import { ActionType, StateType } from "./types";
 
 export const ActionSetTempLoading = (loaded: boolean): ActionType => ({
   type: "setTempLoading",
@@ -19,4 +19,14 @@ export const ActionAddFavorite = (name: string): ActionType => ({
 export const ActionRemoveFavorite = (name: string): ActionType => ({
   type: "removeFavorite",
   payload: name,
+});
+
+export const ActionSetState = (state: StateType): ActionType => ({
+  type: "setState",
+  payload: state,
+});
+
+export const ActionSetLoaded = (loaded: boolean): ActionType => ({
+  type: "setLoaded",
+  payload: loaded,
 });

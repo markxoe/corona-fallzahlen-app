@@ -1,6 +1,8 @@
 import { createContext, FC, useReducer } from "react";
 import { ActionType, ContextType, StateType } from "./types";
 
+import { Plugins } from "@capacitor/core";
+
 export const AppContext = createContext<ContextType>({} as ContextType);
 
 export const initialState: StateType = {
@@ -9,6 +11,7 @@ export const initialState: StateType = {
     cache: {},
   },
   favorites: [],
+  dataLoadedFromStore: false,
 };
 
 const reducer = (state: StateType, action: ActionType): StateType => {
@@ -28,6 +31,15 @@ const reducer = (state: StateType, action: ActionType): StateType => {
         favorites: state.favorites.filter((i) => i !== action.payload),
       };
     }
+    case "setState": {
+      return {
+        ...action.payload,
+        temp: state.temp,
+      };
+    }
+    case "setLoaded": {
+      return { ...state, dataLoadedFromStore: action.payload };
+    }
   }
   return state;
 };
@@ -39,4 +51,27 @@ export const AppContextProvider: FC = (props: any) => {
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
   );
+};
+
+export const saveData = (state: StateType) => {
+  const toSave: StateType = { ...state, temp: initialState.temp };
+
+  Plugins.Storage.set({
+    key: "corona-fallzahlen-app-state",
+    value: JSON.stringify(toSave),
+  });
+};
+
+export const loadData = async (): Promise<StateType> => {
+  return await Plugins.Storage.get({ key: "corona-fallzahlen-app-state" })
+    .then((d) => {
+      if (d.value && d.value !== "") {
+        return { ...initialState, ...JSON.parse(d.value) };
+      } else {
+        return initialState;
+      }
+    })
+    .catch(() => {
+      return initialState;
+    });
 };
