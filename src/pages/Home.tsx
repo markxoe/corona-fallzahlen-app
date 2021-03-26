@@ -15,14 +15,58 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../db/Store";
 import { displayValue, showOrSkeleton } from "../functions/rendering";
 
 import packageJSON from "../../package.json";
+import { StateOrDistrictData } from "../api/types";
+import {
+  ConvertDistrictToCoronaData,
+  ConvertStateToCoronaData,
+} from "../functions/data";
+import { ActionRemoveFavorite } from "../db/Actions";
+import StateOrDistrictCard from "../components/StateOrDistrictCard";
 
 const PageHome: React.FC = () => {
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
+  const [favorites, setFavorites] = useState<StateOrDistrictData[]>([]);
+
+  useEffect(() => {
+    let _data: StateOrDistrictData[] = [];
+
+    if (state.temp.cache.data) {
+      const stateKeys = Object.keys(state.temp.cache.data.states.data);
+      const favoriteStatesKeys = stateKeys.filter((i) =>
+        state.favorites.includes(i)
+      );
+
+      let _states: StateOrDistrictData[] = [];
+      favoriteStatesKeys.forEach((i) => {
+        const _state = state.temp.cache.data?.states.data[i];
+        if (_state) _states = [..._states, ConvertStateToCoronaData(_state, i)];
+      });
+
+      const districtKeys = Object.keys(state.temp.cache.data.districts.data);
+      console.log(districtKeys);
+      const favoriteDistrictKeys = districtKeys.filter((i) =>
+        state.favorites.includes(i)
+      );
+
+      let _districts: StateOrDistrictData[] = [];
+      favoriteDistrictKeys.forEach((i) => {
+        const _district = state.temp.cache.data?.districts.data[i];
+        if (_district)
+          _districts = [
+            ..._districts,
+            ConvertDistrictToCoronaData(_district, i),
+          ];
+      });
+
+      _data = [..._states, ..._districts];
+    }
+    setFavorites(_data);
+  }, [state.favorites, state.temp]);
 
   return (
     <IonPage>
@@ -48,6 +92,11 @@ const PageHome: React.FC = () => {
               : "Daten nicht geladen"}
           </IonCardContent>
         </IonCard>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Favoriten</IonCardTitle>
+          </IonCardHeader>
+        </IonCard>
 
         {/* <IonCard>
           <IonCardHeader>
@@ -64,6 +113,13 @@ const PageHome: React.FC = () => {
             </IonGrid>
           </IonCardContent>
         </IonCard> */}
+        {favorites.map((i) => (
+          <StateOrDistrictCard
+            stateordistrict={i}
+            isFavorite={true}
+            toggleFavorite={() => dispatch(ActionRemoveFavorite(i.id ?? ""))}
+          />
+        ))}
 
         <IonCard>
           <IonCardHeader>
