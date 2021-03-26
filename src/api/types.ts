@@ -98,4 +98,5 @@ export interface StateOrDistrictData {
   recovered: number;
   weekIncidence: number;
   casesPer100k: number;
+  id?: string;
 }

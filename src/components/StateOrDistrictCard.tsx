@@ -13,9 +13,25 @@ import { StateOrDistrictData } from "../api/types";
 import { displayValue } from "../functions/rendering";
 const StateOrDistrictCard: React.FC<{
   stateordistrict: StateOrDistrictData;
-}> = ({ stateordistrict }) => {
+  isFavorite?: boolean;
+  toggleFavorite?: () => any;
+}> = ({ stateordistrict, toggleFavorite = () => {}, isFavorite = false }) => {
+  const showActionSheet = () => {
+    const el = document.createElement("ion-action-sheet");
+    el.title = "Aktionen";
+    el.buttons = [
+      {
+        text: isFavorite ? "Favorit entfernen" : "Favorit machen",
+        handler: () => toggleFavorite(),
+      },
+      { text: "Abbrechen", role: "cancel" },
+    ];
+    el.present();
+    document.body.appendChild(el);
+  };
+
   return (
-    <IonCard>
+    <IonCard onClick={showActionSheet}>
       <IonCardHeader>
         <IonCardTitle>{stateordistrict.name}</IonCardTitle>
       </IonCardHeader>
