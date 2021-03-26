@@ -12,6 +12,7 @@ import React from "react";
 import { StateOrDistrictData } from "../api/types";
 import { displayValue } from "../functions/rendering";
 import { close, star, starOutline } from "ionicons/icons";
+import { getColorFromIncidence } from "../functions/incidence-color-generator";
 
 const StateOrDistrictCard: React.FC<{
   stateordistrict: StateOrDistrictData;
@@ -34,7 +35,10 @@ const StateOrDistrictCard: React.FC<{
   };
 
   return (
-    <IonCard onClick={showActionSheet}>
+    <IonCard
+      color={getColorFromIncidence(stateordistrict.weekIncidence)}
+      onClick={showActionSheet}
+    >
       <IonCardHeader>
         <IonCardTitle>{stateordistrict.name}</IonCardTitle>
         <IonCardSubtitle hidden={!isFavorite}>Favorit</IonCardSubtitle>
