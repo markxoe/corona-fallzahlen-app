@@ -23,7 +23,7 @@ const StateOrDistrictCard: React.FC<{
     el.header = "Aktionen";
     el.buttons = [
       {
-        text: isFavorite ? "Favorit entfernen" : "Favorit machen",
+        text: isFavorite ? "Favorit entfernen" : "Favorit erstellen",
         handler: () => toggleFavorite(),
         icon: isFavorite ? star : starOutline,
       },
