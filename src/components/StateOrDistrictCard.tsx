@@ -34,6 +34,7 @@ const StateOrDistrictCard: React.FC<{
     <IonCard onClick={showActionSheet}>
       <IonCardHeader>
         <IonCardTitle>{stateordistrict.name}</IonCardTitle>
+        <IonCardSubtitle hidden={!isFavorite}>Favorit</IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonGrid>
