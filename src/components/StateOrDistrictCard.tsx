@@ -20,7 +20,7 @@ const StateOrDistrictCard: React.FC<{
 }> = ({ stateordistrict, toggleFavorite = () => {}, isFavorite = false }) => {
   const showActionSheet = () => {
     const el = document.createElement("ion-action-sheet");
-    el.title = "Aktionen";
+    el.header = "Aktionen";
     el.buttons = [
       {
         text: isFavorite ? "Favorit entfernen" : "Favorit machen",
