@@ -92,27 +92,7 @@ const PageHome: React.FC = () => {
               : "Daten nicht geladen"}
           </IonCardContent>
         </IonCard>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Favoriten</IonCardTitle>
-          </IonCardHeader>
-        </IonCard>
 
-        {/* <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Favoriten</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonGrid>
-              <IonRow>
-                <IonCol>
-                  <b>Name</b>
-                </IonCol>
-                <IonCol className="ion-text-end">Inzidenz</IonCol>
-              </IonRow>
-            </IonGrid>
-          </IonCardContent>
-        </IonCard> */}
         {favorites.map((i) => (
           <StateOrDistrictCard
             stateordistrict={i}
