@@ -22,6 +22,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 import "./style/custom.css";
+import "./style/incidences.css";
 
 import { AppContextProvider } from "./db/Store";
 
