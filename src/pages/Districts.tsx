@@ -31,7 +31,7 @@ const PageDistricts: React.FC = () => {
         const _state = state.temp.cache.data?.districts.data[i];
         if (_state) _out = [..._out, ConvertDistrictToCoronaData(_state)];
       });
-      if (search.length > 3) {
+      if (search.length > 2) {
         _out = _out.filter((i) =>
           i.name.toLowerCase().includes(search.toLowerCase())
         );
@@ -62,7 +62,7 @@ const PageDistricts: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {search.length <= 3 ? (
+        {search.length <= 2 ? (
           <p className="ion-padding">
             Suchbegriff länger als 3 Zeichen eingeben
           </p>
