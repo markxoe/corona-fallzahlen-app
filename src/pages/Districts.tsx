@@ -57,6 +57,7 @@ const PageDistricts: React.FC = () => {
             onIonChange={(e) => {
               setSearch(e.detail.value ?? "");
             }}
+            placeholder="Suche"
             value={search}
           />
         </IonToolbar>
