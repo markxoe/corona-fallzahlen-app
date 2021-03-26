@@ -8,7 +8,7 @@ import {
 } from "./types";
 
 export const baseURL = "https://api.corona-zahlen.org/";
-export const axiosConfig: AxiosRequestConfig = { timeout: 1000 };
+export const axiosConfig: AxiosRequestConfig = { timeout: 3000 };
 export const getStates = async (): Promise<
   APIResponseType<APIStatesResponseType>
 > => {
