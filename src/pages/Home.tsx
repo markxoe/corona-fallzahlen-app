@@ -129,16 +129,7 @@ const PageHome: React.FC = () => {
                 <IonCardContent>
                   <IonGrid>
                     <IonRow>
-                      <IonCol>Fälle</IonCol>
-                      <IonCol>
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.cases,
-                          displayValue
-                        )}
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>Inzidenz</IonCol>
+                      <IonCol>7-Tage-Inzidenz</IonCol>
                       <IonCol>
                         {showOrSkeleton(
                           state.temp.cache.data?.germany.weekIncidence,
@@ -147,7 +138,25 @@ const PageHome: React.FC = () => {
                       </IonCol>
                     </IonRow>
                     <IonRow>
-                      <IonCol>Neuinfektionen</IonCol>
+                      <IonCol>Fälle gesamt</IonCol>
+                      <IonCol>
+                        {showOrSkeleton(
+                          state.temp.cache.data?.germany.cases,
+                          displayValue
+                        )}
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>Todesfälle gesamt</IonCol>
+                      <IonCol>
+                        {showOrSkeleton(
+                          state.temp.cache.data?.germany.deaths,
+                          displayValue
+                        )}
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>Neue Fälle</IonCol>
                       <IonCol>
                         {showOrSkeleton(
                           state.temp.cache.data?.germany.delta.cases,
@@ -156,7 +165,7 @@ const PageHome: React.FC = () => {
                       </IonCol>
                     </IonRow>
                     <IonRow>
-                      <IonCol>Todesfälle</IonCol>
+                      <IonCol>Neue Todesfälle</IonCol>
                       <IonCol>
                         {showOrSkeleton(
                           state.temp.cache.data?.germany.delta.deaths,

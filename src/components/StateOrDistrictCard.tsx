@@ -46,15 +46,15 @@ const StateOrDistrictCard: React.FC<{
       <IonCardContent>
         <IonGrid>
           <IonRow>
-            <IonCol>Inzidenz</IonCol>
+            <IonCol>7-Tage Inzidenz</IonCol>
             <IonCol>{displayValue(stateordistrict.weekIncidence)}</IonCol>
           </IonRow>
           <IonRow>
-            <IonCol>Fälle</IonCol>
+            <IonCol>Fälle gesamt</IonCol>
             <IonCol>{stateordistrict.cases}</IonCol>
           </IonRow>
           <IonRow>
-            <IonCol>Todesfälle</IonCol>
+            <IonCol>Todesfälle gesamt</IonCol>
             <IonCol>{stateordistrict.deaths}</IonCol>
           </IonRow>
           <IonRow>
