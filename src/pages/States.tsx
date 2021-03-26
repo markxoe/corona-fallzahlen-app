@@ -1,38 +1,32 @@
 import {
   IonBackButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonCol,
   IonContent,
   IonFooter,
-  IonGrid,
   IonHeader,
   IonPage,
   IonProgressBar,
-  IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import React, { useContext, useEffect, useState } from "react";
-import { APIStateType } from "../api/types";
+import { StateOrDistrictData } from "../api/types";
+import StateOrDistrictCard from "../components/StateOrDistrictCard";
+import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 import { AppContext } from "../db/Store";
-import { displayValue } from "../functions/rendering";
+import { ConvertStateToCoronaData } from "../functions/data";
 
 const PageStates: React.FC = () => {
-  const { state } = useContext(AppContext);
-  const [states, setStates] = useState<APIStateType[]>([]);
+  const { state, dispatch } = useContext(AppContext);
+  const [states, setStates] = useState<StateOrDistrictData[]>([]);
 
   useEffect(() => {
     if (state.temp.cache.data) {
       const keys = Object.keys(state.temp.cache.data.states.data);
-      let _out: APIStateType[] = [];
+      let _out: StateOrDistrictData[] = [];
       keys.forEach((i) => {
         const _state = state.temp.cache.data?.states.data[i];
-        if (_state) _out = [..._out, _state];
+        if (_state) _out = [..._out, ConvertStateToCoronaData(_state, i)];
       });
       _out = _out.sort((a, b) => a.name.localeCompare(b.name));
       setStates(_out);
@@ -51,46 +45,21 @@ const PageStates: React.FC = () => {
       </IonHeader>
       <IonContent>
         {states.map((i) => (
-          <OneState state={i} />
+          <StateOrDistrictCard
+            stateordistrict={i}
+            isFavorite={state.favorites.includes(i.id ?? "")}
+            toggleFavorite={() =>
+              state.favorites.includes(i.id ?? "")
+                ? dispatch(ActionRemoveFavorite(i.id ?? ""))
+                : dispatch(ActionAddFavorite(i.id ?? ""))
+            }
+          />
         ))}
       </IonContent>
       <IonFooter>
         <IonProgressBar hidden={!state.temp.loading} type="indeterminate" />
       </IonFooter>
     </IonPage>
-  );
-};
-
-const OneState: React.FC<{ state: APIStateType }> = ({ state }) => {
-  return (
-    <IonCard>
-      <IonCardHeader>
-        <IonCardTitle>{state.name}</IonCardTitle>
-        <IonCardSubtitle>
-          Inzidenz: {displayValue(state.weekIncidence)}
-        </IonCardSubtitle>
-      </IonCardHeader>
-      <IonCardContent>
-        <IonGrid>
-          <IonRow>
-            <IonCol>Fälle</IonCol>
-            <IonCol className="">{state.cases}</IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>Todesfälle</IonCol>
-            <IonCol>{state.deaths}</IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>Neue Fälle</IonCol>
-            <IonCol>{state.delta.cases}</IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>Neue Todesfälle</IonCol>
-            <IonCol>{state.delta.deaths}</IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonCardContent>
-    </IonCard>
   );
 };
 
