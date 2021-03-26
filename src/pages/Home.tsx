@@ -94,7 +94,7 @@ const PageHome: React.FC = () => {
         </IonRefresher>
 
         <IonGrid>
-          <IonRow>
+          <IonRow className="ion-justify-content-center">
             <IonCol size="12">
               <IonCard>
                 <IonCardContent>
@@ -199,8 +199,9 @@ const PageHome: React.FC = () => {
                 />
               </IonCard>
             </IonCol>
-
-            <IonCol size="auto" sizeSm="6" sizeXs="12">
+          </IonRow>
+          <IonRow>
+            <IonCol size="12" sizeSm="6">
               <IonCard>
                 <IonCardHeader>
                   <IonCardTitle>Informationen</IonCardTitle>
@@ -244,7 +245,7 @@ const PageHome: React.FC = () => {
                 </IonCardContent>
               </IonCard>
             </IonCol>
-            <IonCol size="12">
+            <IonCol size="12" sizeSm="6">
               <IonCard>
                 <IonCardHeader>
                   <IonCardTitle>Über</IonCardTitle>
