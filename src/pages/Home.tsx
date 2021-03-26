@@ -148,7 +148,7 @@ const PageHome: React.FC = () => {
                       <IonCol>Neuinfektionen</IonCol>
                       <IonCol>
                         {showOrSkeleton(
-                          state.temp.cache.data?.germany.weekIncidence,
+                          state.temp.cache.data?.germany.delta.cases,
                           displayValue
                         )}
                       </IonCol>
