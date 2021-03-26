@@ -11,6 +11,8 @@ import {
   IonHeader,
   IonPage,
   IonProgressBar,
+  IonRefresher,
+  IonRefresherContent,
   IonRow,
   IonTitle,
   IonToolbar,
@@ -22,6 +24,7 @@ import { displayValue, showOrSkeleton } from "../functions/rendering";
 import packageJSON from "../../package.json";
 import { StateOrDistrictData } from "../api/types";
 import {
+  cacheDataFromAPI,
   ConvertDistrictToCoronaData,
   ConvertStateToCoronaData,
 } from "../functions/data";
@@ -78,6 +81,17 @@ const PageHome: React.FC = () => {
             <IonTitle size="large">Corona Fallzahlen</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <IonRefresher
+          slot="fixed"
+          onIonRefresh={(e) => {
+            cacheDataFromAPI(dispatch).then(() => e.detail.complete());
+          }}
+          pullFactor={0.5}
+          pullMin={100}
+          pullMax={300}
+        >
+          <IonRefresherContent />
+        </IonRefresher>
 
         <IonCard>
           <IonCardContent>
