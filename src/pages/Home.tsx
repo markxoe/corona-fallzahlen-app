@@ -44,7 +44,7 @@ const PageHome: React.FC = () => {
       let _states: StateOrDistrictData[] = [];
       favoriteStatesKeys.forEach((i) => {
         const _state = state.temp.cache.data?.states.data[i];
-        if (_state) _states = [..._states, ConvertStateToCoronaData(_state, i)];
+        if (_state) _states = [..._states, ConvertStateToCoronaData(_state)];
       });
 
       const districtKeys = Object.keys(state.temp.cache.data.districts.data);
@@ -57,10 +57,7 @@ const PageHome: React.FC = () => {
       favoriteDistrictKeys.forEach((i) => {
         const _district = state.temp.cache.data?.districts.data[i];
         if (_district)
-          _districts = [
-            ..._districts,
-            ConvertDistrictToCoronaData(_district, i),
-          ];
+          _districts = [..._districts, ConvertDistrictToCoronaData(_district)];
       });
 
       _data = [..._states, ..._districts];

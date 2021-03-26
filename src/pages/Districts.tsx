@@ -29,7 +29,7 @@ const PageDistricts: React.FC = () => {
 
       keys.forEach((i) => {
         const _state = state.temp.cache.data?.districts.data[i];
-        if (_state) _out = [..._out, ConvertDistrictToCoronaData(_state, i)];
+        if (_state) _out = [..._out, ConvertDistrictToCoronaData(_state)];
       });
       if (search.length > 3) {
         _out = _out.filter((i) =>

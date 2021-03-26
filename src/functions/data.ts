@@ -22,8 +22,7 @@ export const cacheDataFromAPI = async (dispatch: Dispatch<ActionType>) => {
 };
 
 export const ConvertStateToCoronaData = (
-  state: APIStateType,
-  id?: string
+  state: APIStateType
 ): StateOrDistrictData => {
   return {
     cases: state.cases,
@@ -35,13 +34,12 @@ export const ConvertStateToCoronaData = (
     name: state.name,
     recovered: state.recovered,
     weekIncidence: state.weekIncidence,
-    id: id,
+    id: state.abbreviation,
   };
 };
 
 export const ConvertDistrictToCoronaData = (
-  district: APIDistrictType,
-  id?: string
+  district: APIDistrictType
 ): StateOrDistrictData => {
   return {
     cases: district.cases,
@@ -53,6 +51,6 @@ export const ConvertDistrictToCoronaData = (
     name: district.name,
     recovered: district.recovered,
     weekIncidence: district.weekIncidence,
-    id: id,
+    id: district.ags,
   };
 };

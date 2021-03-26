@@ -26,7 +26,7 @@ const PageStates: React.FC = () => {
       let _out: StateOrDistrictData[] = [];
       keys.forEach((i) => {
         const _state = state.temp.cache.data?.states.data[i];
-        if (_state) _out = [..._out, ConvertStateToCoronaData(_state, i)];
+        if (_state) _out = [..._out, ConvertStateToCoronaData(_state)];
       });
       _out = _out.sort((a, b) => a.name.localeCompare(b.name));
       setStates(_out);
