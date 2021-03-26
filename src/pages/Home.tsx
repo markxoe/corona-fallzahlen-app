@@ -9,6 +9,7 @@ import {
   IonFooter,
   IonGrid,
   IonHeader,
+  IonIcon,
   IonPage,
   IonProgressBar,
   IonRefresher,
@@ -30,6 +31,7 @@ import {
 } from "../functions/data";
 import { ActionRemoveFavorite } from "../db/Actions";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
+import { arrowForward } from "ionicons/icons";
 
 const PageHome: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -178,7 +180,9 @@ const PageHome: React.FC = () => {
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
               <IonCard routerLink="/districts">
                 <IonCardHeader>
-                  <IonCardTitle>Landkreise</IonCardTitle>
+                  <IonCardTitle>
+                    Landkreise <IonIcon icon={arrowForward} size="small" />
+                  </IonCardTitle>
                 </IonCardHeader>
                 <img
                   src="https://api.corona-zahlen.org/map/districts"
@@ -190,7 +194,9 @@ const PageHome: React.FC = () => {
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
               <IonCard routerLink="/states">
                 <IonCardHeader>
-                  <IonCardTitle>Bundesländer</IonCardTitle>
+                  <IonCardTitle>
+                    Bundesländer <IonIcon icon={arrowForward} size="small" />
+                  </IonCardTitle>
                 </IonCardHeader>
                 <img
                   src="https://api.corona-zahlen.org/map/states"
