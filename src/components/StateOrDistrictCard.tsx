@@ -11,6 +11,8 @@ import {
 import React from "react";
 import { StateOrDistrictData } from "../api/types";
 import { displayValue } from "../functions/rendering";
+import { close, star, starOutline } from "ionicons/icons";
+
 const StateOrDistrictCard: React.FC<{
   stateordistrict: StateOrDistrictData;
   isFavorite?: boolean;
@@ -23,8 +25,9 @@ const StateOrDistrictCard: React.FC<{
       {
         text: isFavorite ? "Favorit entfernen" : "Favorit machen",
         handler: () => toggleFavorite(),
+        icon: isFavorite ? star : starOutline,
       },
-      { text: "Abbrechen", role: "cancel" },
+      { text: "Abbrechen", role: "cancel", icon: close },
     ];
     el.present();
     document.body.appendChild(el);
