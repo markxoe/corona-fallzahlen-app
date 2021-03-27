@@ -1,34 +1,42 @@
-name: Test And Build
+name: Test, build and deploy
 on: [push]
 jobs:
-  testing:
+  test-n-build:
+    name: 👌 Test and 👷‍♂️ Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: 12
       - name: Installing
         run: npm ci
+
       - name: Testing
         run: npm test
+
       - name: Building
         run: npm run build
 
+      - name: Upload  web artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: web
+          path: build/
+
   deploy-web:
+    name: 🚀 Deploy Web
     needs: testing
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Installing
-        run: npm ci
-
-      - name: Building
-        run: npm run build
+      - name: Download math result for job 1
+        uses: actions/download-artifact@v2
+        with:
+          name: web
+          path: build/
 
       - name: Upload
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
