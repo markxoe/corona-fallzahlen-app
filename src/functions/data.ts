@@ -48,7 +48,7 @@ export const ConvertDistrictToCoronaData = (
     deaths: district.deaths,
     deathsPerWeek: district.deathsPerWeek,
     delta: district.delta,
-    name: district.name,
+    name: district.county,
     recovered: district.recovered,
     weekIncidence: district.weekIncidence,
     id: district.ags,
