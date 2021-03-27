@@ -1,6 +1,8 @@
-# Corona Fallzahlen App
+# WIP Corona Fallzahlen App
 
-## WIP
+![GitHub package.json version](https://img.shields.io/github/package-json/v/markxoe/corona-fallzahlen-app)
+
+## Beschreibung
 
 Corona Fallzahlen App zum Anzeigen von Corona Fallzahlen
 

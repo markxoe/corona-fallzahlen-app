@@ -83,3 +83,20 @@ export interface APICacheType {
     districts: APIDistrictsResponseType;
   };
 }
+
+export interface StateOrDistrictData {
+  name: string;
+  delta: {
+    cases: number;
+    deaths: number;
+    recovered: number;
+  };
+  cases: number;
+  deaths: number;
+  casesPerWeek: number;
+  deathsPerWeek: number;
+  recovered: number;
+  weekIncidence: number;
+  casesPer100k: number;
+  id?: string;
+}

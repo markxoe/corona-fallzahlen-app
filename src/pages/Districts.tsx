@@ -1,43 +1,37 @@
 import {
   IonBackButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonCol,
   IonContent,
   IonFooter,
-  IonGrid,
   IonHeader,
   IonPage,
   IonProgressBar,
-  IonRow,
   IonSearchbar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import React, { useContext, useEffect, useState } from "react";
-import { APIDistrictType } from "../api/types";
+import { StateOrDistrictData } from "../api/types";
+import StateOrDistrictCard from "../components/StateOrDistrictCard";
+import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 import { AppContext } from "../db/Store";
-import { displayValue } from "../functions/rendering";
+import { ConvertDistrictToCoronaData } from "../functions/data";
 
 const PageDistricts: React.FC = () => {
-  const { state } = useContext(AppContext);
-  const [districts, setDistricts] = useState<APIDistrictType[]>([]);
+  const { state, dispatch } = useContext(AppContext);
+  const [districts, setDistricts] = useState<StateOrDistrictData[]>([]);
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     if (state.temp.cache.data) {
       const keys = Object.keys(state.temp.cache.data.districts.data);
-      let _out: APIDistrictType[] = [];
+      let _out: StateOrDistrictData[] = [];
 
       keys.forEach((i) => {
         const _state = state.temp.cache.data?.districts.data[i];
-        if (_state) _out = [..._out, _state];
+        if (_state) _out = [..._out, ConvertDistrictToCoronaData(_state)];
       });
-      if (search.length > 3) {
+      if (search.length > 2) {
         _out = _out.filter((i) =>
           i.name.toLowerCase().includes(search.toLowerCase())
         );
@@ -63,12 +57,13 @@ const PageDistricts: React.FC = () => {
             onIonChange={(e) => {
               setSearch(e.detail.value ?? "");
             }}
+            placeholder="Suche"
             value={search}
           />
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {search.length <= 3 ? (
+        {search.length <= 2 ? (
           <p className="ion-padding">
             Suchbegriff länger als 3 Zeichen eingeben
           </p>
@@ -78,46 +73,21 @@ const PageDistricts: React.FC = () => {
           ""
         )}
         {districts.map((i) => (
-          <OneDistrict district={i} />
+          <StateOrDistrictCard
+            stateordistrict={i}
+            isFavorite={state.favorites.includes(i.id ?? "")}
+            toggleFavorite={() =>
+              state.favorites.includes(i.id ?? "")
+                ? dispatch(ActionRemoveFavorite(i.id ?? ""))
+                : dispatch(ActionAddFavorite(i.id ?? ""))
+            }
+          />
         ))}
       </IonContent>
       <IonFooter>
         <IonProgressBar hidden={!state.temp.loading} type="indeterminate" />
       </IonFooter>
     </IonPage>
-  );
-};
-
-const OneDistrict: React.FC<{ district: APIDistrictType }> = ({ district }) => {
-  return (
-    <IonCard>
-      <IonCardHeader>
-        <IonCardTitle>{district.name}</IonCardTitle>
-        <IonCardSubtitle>
-          Inzidenz: {displayValue(district.weekIncidence)}
-        </IonCardSubtitle>
-      </IonCardHeader>
-      <IonCardContent>
-        <IonGrid>
-          <IonRow>
-            <IonCol>Fälle</IonCol>
-            <IonCol className="">{district.cases}</IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>Todesfälle</IonCol>
-            <IonCol>{district.deaths}</IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>Neue Fälle</IonCol>
-            <IonCol>{district.delta.cases}</IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>Neue Todesfälle</IonCol>
-            <IonCol>{district.delta.deaths}</IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonCardContent>
-    </IonCard>
   );
 };
 

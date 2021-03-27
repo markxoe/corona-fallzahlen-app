@@ -6,7 +6,9 @@
   "webDir": "build",
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 0
+      "launchShowDuration": 2000,
+      "androidScaleType": "FIT_CENTER",
+      "backgroundColor": "#000000"
     }
   },
   "cordova": {}

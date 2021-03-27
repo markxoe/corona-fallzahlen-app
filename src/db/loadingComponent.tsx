@@ -1,13 +1,26 @@
 import React, { useContext, useEffect } from "react";
 import { cacheDataFromAPI } from "../functions/data";
-import { AppContext } from "./Store";
+import { ActionSetLoaded, ActionSetState } from "./Actions";
+import { AppContext, loadData, saveData } from "./Store";
 
 const Loader: React.FC = ({ children }) => {
-  const { dispatch } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
+  const load = async () => {
+    await loadData().then((d) => {
+      dispatch(ActionSetState(d));
+      dispatch(ActionSetLoaded(true));
+    });
+    await cacheDataFromAPI(dispatch);
+  };
   useEffect(() => {
-    cacheDataFromAPI(dispatch);
+    load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (state.dataLoadedFromStore) saveData(state);
+  }, [state]);
+
   return <>{children}</>;
 };
 export default Loader;
