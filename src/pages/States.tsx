@@ -6,6 +6,7 @@ import {
   IonHeader,
   IonPage,
   IonProgressBar,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -20,6 +21,8 @@ const PageStates: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
   const [states, setStates] = useState<StateOrDistrictData[]>([]);
 
+  const [search, setSearch] = useState<string>("");
+
   useEffect(() => {
     if (state.temp.cache.data) {
       const keys = Object.keys(state.temp.cache.data.states.data);
@@ -28,10 +31,15 @@ const PageStates: React.FC = () => {
         const _state = state.temp.cache.data?.states.data[i];
         if (_state) _out = [..._out, ConvertStateToCoronaData(_state)];
       });
+      if (search.length > 0) {
+        _out = _out.filter((i) =>
+          i.name.toLowerCase().includes(search.toLowerCase())
+        );
+      }
       _out = _out.sort((a, b) => a.name.localeCompare(b.name));
       setStates(_out);
     }
-  }, [state]);
+  }, [state, search]);
 
   return (
     <IonPage>
@@ -41,6 +49,15 @@ const PageStates: React.FC = () => {
             <IonBackButton routerAnimation={undefined} defaultHref="/home" />
           </IonButtons>
           <IonTitle>Bundesländer</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <IonSearchbar
+            onIonChange={(e) => {
+              setSearch(e.detail.value ?? "");
+            }}
+            placeholder="Suche"
+            value={search}
+          />
         </IonToolbar>
       </IonHeader>
       <IonContent>
