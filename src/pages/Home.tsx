@@ -224,7 +224,7 @@ const PageHome: React.FC = () => {
                 <IonCardContent>
                   <IonGrid>
                     <IonRow>
-                      <IonCol>Kontakt</IonCol>
+                      <IonCol>Kontaktperson der API</IonCol>
                       <IonCol className="ion-text-end">
                         {showOrSkeleton(
                           state.temp.cache.data?.germany.meta.contact
@@ -232,7 +232,7 @@ const PageHome: React.FC = () => {
                       </IonCol>
                     </IonRow>
                     <IonRow>
-                      <IonCol>Quelle</IonCol>
+                      <IonCol>Datenquelle</IonCol>
                       <IonCol className="ion-text-end">
                         {showOrSkeleton(
                           state.temp.cache.data?.germany.meta.source
