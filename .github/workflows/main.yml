@@ -29,7 +29,7 @@ jobs:
 
   deploy-web:
     name: 🚀 Deploy Web
-    needs: testing
+    needs: test-n-build
     runs-on: ubuntu-latest
     steps:
       - name: Download math result for job 1
