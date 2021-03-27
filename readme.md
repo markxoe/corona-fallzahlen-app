@@ -1,6 +1,12 @@
-# WIP Corona Fallzahlen App
+# Corona Fallzahlen App
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/markxoe/corona-fallzahlen-app)
+![GitHub](https://img.shields.io/github/license/markxoe/corona-fallzahlen-app?style=flat-square)
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/markxoe/corona-fallzahlen-app?style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/markxoe/corona-fallzahlen-app/Test,%20build%20and%20deploy?style=flat-square)
+
+![Uses Ionic](https://img.shields.io/badge/-uses%20ionic-000?logo=ionic&style=flat-square)
+![Uses capacitor](https://img.shields.io/badge/-uses%20capacitor-000?logo=capacitor&style=flat-square)
 
 ## Beschreibung
 
@@ -36,10 +42,26 @@ Codequality ist vielleicht nicht so nice aber egal
 2. Nen Build machen mit `npm run build`
 3. Wenns spaß macht noch testen mit `npm run test`
 
+### Für Android
+
+Achtung: Du brauchst Android Studio
+
+1. Build machen
+2. Android Platform Synchronisieren mit `npx cap sync android`
+3. Android Studio öffnen mit `npx cap open android`
+
+### Für iOS
+
+Achtung: Du brauchst nen Mac und XCode
+
+1. Build machen
+2. ios Platform Synchronisieren mit `npx cap sync ios`
+3. XCode öffnen mit `npx cap open ios`
+
 ## Geplante tolle Dinge
 
 - [ ] Infinity Scroll
-- [ ] Favoriten
+- [x] Favoriten
 
 ## Lizenz
 
