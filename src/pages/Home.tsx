@@ -67,6 +67,11 @@ const PageHome: React.FC = () => {
 
       _data = [..._states, ..._districts];
     }
+    _data = _data.sort(
+      (a, b) =>
+        state.favorites.indexOf(a.id ?? "") -
+        state.favorites.indexOf(b.id ?? "")
+    );
     setFavorites(_data);
   }, [state.favorites, state.temp]);
 
