@@ -79,13 +79,13 @@ const PageHome: React.FC = () => {
     <IonPage>
       <IonHeader translucent>
         <IonToolbar>
-          <IonTitle>Corona Fallzahlen</IonTitle>
+          <IonTitle>Einfache Fallzahlen</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Corona Fallzahlen</IonTitle>
+            <IonTitle size="large">Einfache Fallzahlen</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRefresher

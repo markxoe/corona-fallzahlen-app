@@ -1,6 +1,6 @@
 {
   "appId": "org.toastbrot.covidcases",
-  "appName": "Corona Fallzahlen",
+  "appName": "Einfache Fallzahlen",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
