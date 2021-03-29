@@ -27,8 +27,31 @@ jobs:
           name: web
           path: build/
 
-  deploy-web:
-    name: 🚀 Deploy Web
+  deploy-web-dev:
+    name: 🚀 Deploy Web dev
+    needs: test-n-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download web artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: web
+          path: build/
+
+      - name: Upload
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          protocol: ftps
+          port: ${{ secrets.FTP_PORT }}
+          server-dir: ${{ secrets.FTP_TARGET_DEV }}
+          local-dir: build/
+
+  deploy-web-master:
+    if: github.ref == 'refs/heads/master'
+    name: 🚀 Deploy Web master
     needs: test-n-build
     runs-on: ubuntu-latest
     steps:
