@@ -20,53 +20,26 @@ import {
 } from "@ionic/react";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../db/Store";
-import { displayValue, showOrSkeleton } from "../functions/rendering";
+import { showOrSkeleton } from "../functions/rendering";
 
 import packageJSON from "../../package.json";
-import { StateOrDistrictData } from "../api/types";
-import {
-  cacheDataFromAPI,
-  ConvertDistrictToCoronaData,
-  ConvertStateToCoronaData,
-} from "../functions/data";
+import { CoronaData, CoronaDataLocation } from "../api/types";
+import { cacheDataFromAPI } from "../functions/data";
 import { ActionRemoveFavorite } from "../db/Actions";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
-import { arrowForward } from "ionicons/icons";
+import { arrowForward, map } from "ionicons/icons";
 
 const PageHome: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
-  const [favorites, setFavorites] = useState<StateOrDistrictData[]>([]);
+  const [favorites, setFavorites] = useState<CoronaData[]>([]);
 
   useEffect(() => {
-    let _data: StateOrDistrictData[] = [];
+    let _data: CoronaData[] = [];
 
     if (state.temp.cache.data) {
-      const stateKeys = Object.keys(state.temp.cache.data.states.data);
-      const favoriteStatesKeys = stateKeys.filter((i) =>
-        state.favorites.includes(i)
-      );
-
-      let _states: StateOrDistrictData[] = [];
-      favoriteStatesKeys.forEach((i) => {
-        const _state = state.temp.cache.data?.states.data[i];
-        if (_state) _states = [..._states, ConvertStateToCoronaData(_state)];
-      });
-
-      const districtKeys = Object.keys(state.temp.cache.data.districts.data);
-      console.log(districtKeys);
-      const favoriteDistrictKeys = districtKeys.filter((i) =>
-        state.favorites.includes(i)
-      );
-
-      let _districts: StateOrDistrictData[] = [];
-      favoriteDistrictKeys.forEach((i) => {
-        const _district = state.temp.cache.data?.districts.data[i];
-        if (_district)
-          _districts = [..._districts, ConvertDistrictToCoronaData(_district)];
-      });
-
-      _data = [..._states, ..._districts];
+      _data = state.temp.cache.data.coronaData;
     }
+    _data = _data.filter((i) => state.favorites.includes(i.id));
     _data = _data.sort(
       (a, b) =>
         state.favorites.indexOf(a.id ?? "") -
@@ -105,10 +78,10 @@ const PageHome: React.FC = () => {
             <IonCol size="12">
               <IonCard>
                 <IonCardContent>
-                  {state.temp.cache.data?.germany
+                  {state.temp.cache.data?.meta
                     ? "Daten vom " +
                       new Date(
-                        state.temp.cache.data.germany.meta.lastUpdate
+                        state.temp.cache.data?.meta.lastUpdate
                       ).toLocaleDateString()
                     : "Daten nicht geladen"}
                 </IonCardContent>
@@ -127,69 +100,12 @@ const PageHome: React.FC = () => {
               </IonCol>
             ))}
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
-              <IonCard>
-                <IonCardHeader>
-                  <IonCardTitle>Deutschland</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  <IonGrid>
-                    <IonRow>
-                      <IonCol>7-Tage-Inzidenz</IonCol>
-                      <IonCol>
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.weekIncidence,
-                          displayValue
-                        )}
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>Fälle gesamt</IonCol>
-                      <IonCol>
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.cases,
-                          displayValue
-                        )}
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>Todesfälle gesamt</IonCol>
-                      <IonCol>
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.deaths,
-                          displayValue
-                        )}
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>Neue Fälle</IonCol>
-                      <IonCol>
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.delta.cases,
-                          displayValue
-                        )}
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>Neue Todesfälle</IonCol>
-                      <IonCol>
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.delta.deaths,
-                          displayValue
-                        )}
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>R Wert</IonCol>
-                      <IonCol>
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.r.value,
-                          displayValue
-                        )}
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </IonCardContent>
-              </IonCard>
+              <StateOrDistrictCard
+                showColor={false}
+                stateordistrict={state.temp.cache.data?.coronaData.find(
+                  (i) => i.location === CoronaDataLocation.GERMANY
+                )}
+              />
             </IonCol>
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
               <IonCard routerLink="/districts">
@@ -198,11 +114,17 @@ const PageHome: React.FC = () => {
                     Landkreise <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                <img
-                  src="https://api.corona-zahlen.org/map/districts"
-                  className="lil-img-padding"
-                  alt="Corona Landkarte Landkreise"
-                />
+                {state.temp.cache.data ? (
+                  <img
+                    src={state.temp.cache.data?.districtsMap ?? ""}
+                    className="lil-img-padding"
+                    alt="Corona Landkarte Landkreise"
+                  />
+                ) : (
+                  <IonCardContent>
+                    <IonIcon icon={map} size="large" />
+                  </IonCardContent>
+                )}
               </IonCard>
             </IonCol>
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
@@ -212,11 +134,17 @@ const PageHome: React.FC = () => {
                     Bundesländer <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                <img
-                  src="https://api.corona-zahlen.org/map/states"
-                  className="lil-img-padding"
-                  alt="Corona Landkarte Bundesländer"
-                />
+                {state.temp.cache.data ? (
+                  <img
+                    src={state.temp.cache.data?.statesMap ?? ""}
+                    className="lil-img-padding"
+                    alt="Corona Landkarte Bundesländer"
+                  />
+                ) : (
+                  <IonCardContent>
+                    <IonIcon icon={map} size="large" />
+                  </IonCardContent>
+                )}
               </IonCard>
             </IonCol>
           </IonRow>
@@ -231,26 +159,20 @@ const PageHome: React.FC = () => {
                     <IonRow>
                       <IonCol>Kontaktperson der API</IonCol>
                       <IonCol className="ion-text-end">
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.meta.contact
-                        )}
+                        {showOrSkeleton(state.temp.cache.data?.meta.contact)}
                       </IonCol>
                     </IonRow>
                     <IonRow>
                       <IonCol>Datenquelle</IonCol>
                       <IonCol className="ion-text-end">
-                        {showOrSkeleton(
-                          state.temp.cache.data?.germany.meta.source
-                        )}
+                        {showOrSkeleton(state.temp.cache.data?.meta.source)}
                       </IonCol>
                     </IonRow>
                     <IonRow>
                       <IonCol>Source Code zur API</IonCol>
                       <IonCol className="ion-text-end">
-                        <a href={state.temp.cache.data?.germany.meta.info}>
-                          {showOrSkeleton(
-                            state.temp.cache.data?.germany.meta.info
-                          )}
+                        <a href={state.temp.cache.data?.meta.info}>
+                          {showOrSkeleton(state.temp.cache.data?.meta.info)}
                         </a>
                       </IonCol>
                     </IonRow>

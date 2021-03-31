@@ -78,14 +78,22 @@ export interface APIResponseType<T> {
 
 export interface APICacheType {
   data?: {
-    germany: APIGermanyResponseType;
-    states: APIStatesResponseType;
-    districts: APIDistrictsResponseType;
+    coronaData: CoronaData[];
+    meta: APIMetaType;
+    statesMap: string;
+    districtsMap: string;
   };
 }
 
-export interface StateOrDistrictData {
+export enum CoronaDataLocation {
+  DISTRICT = "district",
+  STATE = "state",
+  GERMANY = "germany",
+}
+
+export interface CoronaData {
   name: string;
+  nameToSort?: string;
   delta: {
     cases: number;
     deaths: number;
@@ -94,9 +102,11 @@ export interface StateOrDistrictData {
   cases: number;
   deaths: number;
   casesPerWeek: number;
-  deathsPerWeek: number;
+  deathsPerWeek?: number;
   recovered: number;
   weekIncidence: number;
   casesPer100k: number;
-  id?: string;
+  id: string;
+  location: CoronaDataLocation;
+  r?: number;
 }

@@ -1,20 +1,26 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import {
+  convertAllDistricts,
+  convertAllStates,
+  ConvertGermanyToCoronaData,
+} from "../functions/data";
 import {
   APIStatesResponseType,
   APIResponseType,
   APIGermanyResponseType,
   APIDistrictsResponseType,
   APICacheType,
+  CoronaData,
+  APIMetaType,
 } from "./types";
 
 export const baseURL = "https://api.corona-zahlen.org/";
 export const axiosConfig: AxiosRequestConfig = { timeout: 3000 };
-export const getStates = async (): Promise<
-  APIResponseType<APIStatesResponseType>
-> => {
+
+export const getStates = async (): Promise<APIResponseType<CoronaData[]>> => {
   const response: APIResponseType<APIStatesResponseType> = await axios
     .get(baseURL + "states", axiosConfig)
-    .then((r) => {
+    .then((r: AxiosResponse<APIStatesResponseType>) => {
       if (r.status === 200) {
         return { ok: true, data: r.data };
       } else {
@@ -25,17 +31,34 @@ export const getStates = async (): Promise<
       return {};
     });
 
-  return response;
+  return response.data ? { data: convertAllStates(response.data) } : {};
 };
 
 export const getDistricts = async (): Promise<
-  APIResponseType<APIDistrictsResponseType>
+  APIResponseType<CoronaData[]>
 > => {
   const response: APIResponseType<APIDistrictsResponseType> = await axios
     .get(baseURL + "districts", axiosConfig)
-    .then((r) => {
+    .then((r: AxiosResponse<APIDistrictsResponseType>) => {
       if (r.status === 200) {
         return { data: r.data };
+      } else {
+        return {};
+      }
+    })
+    .catch(() => {
+      return {};
+    });
+
+  return response.data ? { data: convertAllDistricts(response.data) } : {};
+};
+
+export const getGermany = async (): Promise<APIResponseType<CoronaData>> => {
+  const response: APIResponseType<CoronaData> = await axios
+    .get(baseURL + "germany", axiosConfig)
+    .then((r: AxiosResponse<APIGermanyResponseType>) => {
+      if (r.status === 200) {
+        return { data: ConvertGermanyToCoronaData(r.data) };
       } else {
         return {};
       }
@@ -47,14 +70,12 @@ export const getDistricts = async (): Promise<
   return response;
 };
 
-export const getGermany = async (): Promise<
-  APIResponseType<APIGermanyResponseType>
-> => {
-  const response: APIResponseType<APIGermanyResponseType> = await axios
+export const getMeta = async (): Promise<APIResponseType<APIMetaType>> => {
+  const response: APIResponseType<APIMetaType> = await axios
     .get(baseURL + "germany", axiosConfig)
-    .then((r) => {
+    .then((r: AxiosResponse<APIGermanyResponseType>) => {
       if (r.status === 200) {
-        return { data: r.data };
+        return { data: r.data.meta };
       } else {
         return {};
       }
@@ -70,14 +91,44 @@ export const getCache = async (): Promise<APICacheType> => {
   const germany = await getGermany();
   const districts = await getDistricts();
   const states = await getStates();
-  console.log(Object.keys(districts.data?.data ?? {}).length);
-  if (germany.data && districts.data && states.data)
+  const meta = await getMeta();
+
+  const statesMap = await getMap("states");
+  const districtsMap = await getMap("districts");
+
+  if (
+    germany.data &&
+    districts.data &&
+    states.data &&
+    meta.data &&
+    statesMap.data &&
+    districtsMap.data
+  )
     return {
       data: {
-        districts: districts.data,
-        germany: germany.data,
-        states: states.data,
+        coronaData: [germany.data, ...districts.data, ...states.data],
+        meta: meta.data,
+        districtsMap: districtsMap.data,
+        statesMap: statesMap.data,
       },
     };
   else return {};
+};
+
+export const getMap = async (
+  stateOrDistrict: "states" | "districts"
+): Promise<APIResponseType<string>> => {
+  return await axios
+    .get("https://api.corona-zahlen.org/map/" + stateOrDistrict, {
+      responseType: "arraybuffer",
+    })
+    .then((r) => {
+      if (r.status === 200)
+        return {
+          data:
+            "data:image/jpeg;base64," + Buffer.from(r.data).toString("base64"),
+        };
+      else return {};
+    })
+    .catch(() => ({}));
 };
