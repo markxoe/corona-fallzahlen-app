@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { getMap } from "../api/api";
 import { cacheDataFromAPI } from "../functions/data";
 import { ActionSetLoaded, ActionSetState } from "./Actions";
 import { AppContext, loadData, saveData } from "./Store";

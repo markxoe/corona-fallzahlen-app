@@ -93,12 +93,42 @@ export const getCache = async (): Promise<APICacheType> => {
   const states = await getStates();
   const meta = await getMeta();
 
-  if (germany.data && districts.data && states.data && meta.data)
+  const statesMap = await getMap("states");
+  const districtsMap = await getMap("districts");
+
+  if (
+    germany.data &&
+    districts.data &&
+    states.data &&
+    meta.data &&
+    statesMap.data &&
+    districtsMap.data
+  )
     return {
       data: {
         coronaData: [germany.data, ...districts.data, ...states.data],
         meta: meta.data,
+        districtsMap: districtsMap.data,
+        statesMap: statesMap.data,
       },
     };
   else return {};
+};
+
+export const getMap = async (
+  stateOrDistrict: "states" | "districts"
+): Promise<APIResponseType<string>> => {
+  return await axios
+    .get("https://api.corona-zahlen.org/map/" + stateOrDistrict, {
+      responseType: "arraybuffer",
+    })
+    .then((r) => {
+      if (r.status === 200)
+        return {
+          data:
+            "data:image/jpeg;base64," + Buffer.from(r.data).toString("base64"),
+        };
+      else return {};
+    })
+    .catch(() => ({}));
 };

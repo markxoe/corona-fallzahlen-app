@@ -27,7 +27,7 @@ import { CoronaData, CoronaDataLocation } from "../api/types";
 import { cacheDataFromAPI } from "../functions/data";
 import { ActionRemoveFavorite } from "../db/Actions";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
-import { arrowForward } from "ionicons/icons";
+import { arrowForward, map } from "ionicons/icons";
 
 const PageHome: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -114,11 +114,17 @@ const PageHome: React.FC = () => {
                     Landkreise <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                <img
-                  src="https://api.corona-zahlen.org/map/districts"
-                  className="lil-img-padding"
-                  alt="Corona Landkarte Landkreise"
-                />
+                {state.temp.cache.data ? (
+                  <img
+                    src={state.temp.cache.data?.districtsMap ?? ""}
+                    className="lil-img-padding"
+                    alt="Corona Landkarte Landkreise"
+                  />
+                ) : (
+                  <IonCardContent>
+                    <IonIcon icon={map} size="large" />
+                  </IonCardContent>
+                )}
               </IonCard>
             </IonCol>
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
@@ -128,11 +134,17 @@ const PageHome: React.FC = () => {
                     Bundesländer <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                <img
-                  src="https://api.corona-zahlen.org/map/states"
-                  className="lil-img-padding"
-                  alt="Corona Landkarte Bundesländer"
-                />
+                {state.temp.cache.data ? (
+                  <img
+                    src={state.temp.cache.data?.statesMap ?? ""}
+                    className="lil-img-padding"
+                    alt="Corona Landkarte Bundesländer"
+                  />
+                ) : (
+                  <IonCardContent>
+                    <IonIcon icon={map} size="large" />
+                  </IonCardContent>
+                )}
               </IonCard>
             </IonCol>
           </IonRow>

@@ -80,6 +80,8 @@ export interface APICacheType {
   data?: {
     coronaData: CoronaData[];
     meta: APIMetaType;
+    statesMap: string;
+    districtsMap: string;
   };
 }
 
