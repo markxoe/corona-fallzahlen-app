@@ -1,9 +1,12 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonFooter,
   IonHeader,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonPage,
   IonProgressBar,
   IonSearchbar,
@@ -13,6 +16,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { CoronaData, CoronaDataLocation } from "../api/types";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
+import { loadMoreCount } from "../const";
 import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 import { AppContext } from "../db/Store";
 
@@ -21,6 +25,17 @@ const PageStates: React.FC = () => {
   const [states, setStates] = useState<CoronaData[]>([]);
 
   const [search, setSearch] = useState<string>("");
+
+  const [statesRender, setStatesRender] = useState<CoronaData[]>([]);
+  const [infinityDisabled, setInfinityDisabled] = useState<boolean>(false);
+
+  const loadMore = () => {
+    setStatesRender([
+      ...statesRender,
+      ...states.slice(statesRender.length, statesRender.length + 5),
+    ]);
+    setInfinityDisabled(statesRender.length + loadMoreCount >= states.length);
+  };
 
   useEffect(() => {
     if (state.temp.cache.data) {
@@ -35,7 +50,12 @@ const PageStates: React.FC = () => {
       _out = _out.sort((a, b) => a.name.localeCompare(b.name));
       setStates(_out);
     }
+    setStatesRender([]);
   }, [state, search]);
+
+  useEffect(() => {
+    if (statesRender.length === 0) loadMore();
+  }, [statesRender]); // eslint-disable-line
 
   return (
     <IonPage>
@@ -57,8 +77,9 @@ const PageStates: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {states.map((i) => (
+        {statesRender.map((i) => (
           <StateOrDistrictCard
+            key={i.id}
             stateordistrict={i}
             isFavorite={state.favorites.includes(i.id ?? "")}
             toggleFavorite={() =>
@@ -68,6 +89,22 @@ const PageStates: React.FC = () => {
             }
           />
         ))}
+        <IonInfiniteScroll
+          disabled={infinityDisabled}
+          onIonInfinite={(e) => {
+            loadMore();
+            (e.target as HTMLIonInfiniteScrollElement).complete();
+          }}
+        >
+          <IonInfiniteScrollContent />
+        </IonInfiniteScroll>
+        <IonButton
+          hidden={infinityDisabled}
+          expand="full"
+          onClick={() => loadMore()}
+        >
+          Weitere Laden
+        </IonButton>
       </IonContent>
       <IonFooter>
         <IonProgressBar hidden={!state.temp.loading} type="indeterminate" />

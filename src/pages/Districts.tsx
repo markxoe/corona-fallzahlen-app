@@ -1,9 +1,12 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonFooter,
   IonHeader,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonPage,
   IonProgressBar,
   IonSearchbar,
@@ -13,13 +16,27 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { CoronaData, CoronaDataLocation } from "../api/types";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
+import { loadMoreCount } from "../const";
 import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 import { AppContext } from "../db/Store";
 
 const PageDistricts: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
   const [districts, setDistricts] = useState<CoronaData[]>([]);
+  const [districtsRender, setDistrictsRender] = useState<CoronaData[]>([]);
+  const [infinityDisabled, setInfinityDisabled] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
+
+  const loadMore = () => {
+    console.log("Load More");
+    setDistrictsRender([
+      ...districtsRender,
+      ...districts.slice(districtsRender.length, districtsRender.length + 5),
+    ]);
+    setInfinityDisabled(
+      districtsRender.length + loadMoreCount >= districts.length
+    );
+  };
 
   useEffect(() => {
     if (state.temp.cache.data) {
@@ -31,13 +48,16 @@ const PageDistricts: React.FC = () => {
         _out = _out.filter((i) =>
           i.name.toLowerCase().includes(search.toLowerCase())
         );
-      } else {
-        _out = [];
       }
       _out = _out.sort((a, b) => a.name.localeCompare(b.name));
       setDistricts(_out);
+      setDistrictsRender([]);
     }
   }, [state, search]);
+
+  useEffect(() => {
+    if (districtsRender.length === 0) loadMore();
+  }, [districtsRender]); // eslint-disable-line
 
   return (
     <IonPage>
@@ -59,16 +79,7 @@ const PageDistricts: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {search.length <= 2 ? (
-          <p className="ion-padding">
-            Suchbegriff länger als 3 Zeichen eingeben
-          </p>
-        ) : districts.length === 0 ? (
-          <p className="ion-padding">Kennt man nicht</p>
-        ) : (
-          ""
-        )}
-        {districts.map((i) => (
+        {districtsRender.map((i) => (
           <StateOrDistrictCard
             stateordistrict={i}
             isFavorite={state.favorites.includes(i.id ?? "")}
@@ -79,6 +90,23 @@ const PageDistricts: React.FC = () => {
             }
           />
         ))}
+
+        <IonInfiniteScroll
+          disabled={infinityDisabled}
+          onIonInfinite={(e) => {
+            loadMore();
+            (e.target as HTMLIonInfiniteScrollElement).complete();
+          }}
+        >
+          <IonInfiniteScrollContent />
+        </IonInfiniteScroll>
+        <IonButton
+          hidden={infinityDisabled}
+          expand="full"
+          onClick={() => loadMore()}
+        >
+          Weitere Laden
+        </IonButton>
       </IonContent>
       <IonFooter>
         <IonProgressBar hidden={!state.temp.loading} type="indeterminate" />
