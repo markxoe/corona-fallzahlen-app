@@ -20,23 +20,34 @@ import { loadMoreCount } from "../const";
 import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 import { AppContext } from "../db/Store";
 
-const PageStates: React.FC<{ statesOrDistricts: "states" | "districts" }> = ({
-  statesOrDistricts = "states",
-}) => {
+const PageStatesOrDistricts: React.FC<{
+  statesOrDistricts: "states" | "districts";
+}> = ({ statesOrDistricts = "states" }) => {
   const { state, dispatch } = useContext(AppContext);
-  const [states, setStates] = useState<CoronaData[]>([]);
+  const [statesOrDistrictsData, setstatesOrDistrictsData] = useState<
+    CoronaData[]
+  >([]);
 
   const [search, setSearch] = useState<string>("");
 
-  const [statesRender, setStatesRender] = useState<CoronaData[]>([]);
+  const [
+    statesOrDistrictsDataRender,
+    setstatesOrDistrictsDataRender,
+  ] = useState<CoronaData[]>([]);
   const [infinityDisabled, setInfinityDisabled] = useState<boolean>(false);
 
   const loadMore = () => {
-    setStatesRender([
-      ...statesRender,
-      ...states.slice(statesRender.length, statesRender.length + 5),
+    setstatesOrDistrictsDataRender([
+      ...statesOrDistrictsDataRender,
+      ...statesOrDistrictsData.slice(
+        statesOrDistrictsDataRender.length,
+        statesOrDistrictsDataRender.length + 5
+      ),
     ]);
-    setInfinityDisabled(statesRender.length + loadMoreCount >= states.length);
+    setInfinityDisabled(
+      statesOrDistrictsDataRender.length + loadMoreCount >=
+        statesOrDistrictsData.length
+    );
   };
 
   useEffect(() => {
@@ -54,14 +65,14 @@ const PageStates: React.FC<{ statesOrDistricts: "states" | "districts" }> = ({
         );
       }
       _out = _out.sort((a, b) => a.name.localeCompare(b.name));
-      setStates(_out);
+      setstatesOrDistrictsData(_out);
     }
-    setStatesRender([]);
+    setstatesOrDistrictsDataRender([]);
   }, [state, search, statesOrDistricts]);
 
   useEffect(() => {
-    if (statesRender.length === 0) loadMore();
-  }, [statesRender]); // eslint-disable-line
+    if (statesOrDistrictsDataRender.length === 0) loadMore();
+  }, [statesOrDistrictsDataRender]); // eslint-disable-line
 
   return (
     <IonPage>
@@ -85,7 +96,7 @@ const PageStates: React.FC<{ statesOrDistricts: "states" | "districts" }> = ({
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {statesRender.map((i) => (
+        {statesOrDistrictsDataRender.map((i) => (
           <StateOrDistrictCard
             key={i.id}
             stateordistrict={i}
@@ -121,4 +132,4 @@ const PageStates: React.FC<{ statesOrDistricts: "states" | "districts" }> = ({
   );
 };
 
-export default PageStates;
+export default PageStatesOrDistricts;
