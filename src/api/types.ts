@@ -93,6 +93,7 @@ export enum CoronaDataLocation {
 
 export interface CoronaData {
   name: string;
+  nameToSort?: string;
   delta: {
     cases: number;
     deaths: number;

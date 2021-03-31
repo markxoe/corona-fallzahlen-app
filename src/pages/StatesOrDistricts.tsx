@@ -64,7 +64,9 @@ const PageStatesOrDistricts: React.FC<{
           i.name.toLowerCase().includes(search.toLowerCase())
         );
       }
-      _out = _out.sort((a, b) => a.name.localeCompare(b.name));
+      _out = _out.sort((a, b) =>
+        (a.nameToSort ?? a.name).localeCompare(b.nameToSort ?? b.name)
+      );
       setstatesOrDistrictsData(_out);
     }
     setstatesOrDistrictsDataRender([]);
