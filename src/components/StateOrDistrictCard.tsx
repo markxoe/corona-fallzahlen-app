@@ -57,38 +57,38 @@ const StateOrDistrictCard: React.FC<{
         <IonGrid>
           <IonRow>
             <IonCol>7-Tage Inzidenz</IonCol>
-            <IonCol>
+            <IonCol className="ion-text-end">
               {showOrSkeleton(stateordistrict?.weekIncidence, displayValue)}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Fälle gesamt</IonCol>
-            <IonCol>
+            <IonCol className="ion-text-end">
               {showOrSkeleton(stateordistrict?.cases, displayValue)}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Todesfälle gesamt</IonCol>
-            <IonCol>
+            <IonCol className="ion-text-end">
               {showOrSkeleton(stateordistrict?.deaths, displayValue)}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Neue Fälle</IonCol>
-            <IonCol>
+            <IonCol className="ion-text-end">
               {showOrSkeleton(stateordistrict?.delta.cases, displayValue)}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Neue Todesfälle</IonCol>
-            <IonCol>
+            <IonCol className="ion-text-end">
               {showOrSkeleton(stateordistrict?.delta.deaths, displayValue)}
             </IonCol>
           </IonRow>
           {stateordistrict?.r ? (
             <IonRow>
               <IonCol>R Wert</IonCol>
-              <IonCol>
+              <IonCol className="ion-text-end">
                 {showOrSkeleton(stateordistrict?.r, displayValue)}
               </IonCol>
             </IonRow>
