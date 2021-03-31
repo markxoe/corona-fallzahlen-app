@@ -45,6 +45,7 @@ export const ConvertDistrictToCoronaData = (
   district: APIDistrictType
 ): CoronaData => {
   return {
+    nameToSort: district.name,
     cases: district.cases,
     casesPer100k: district.casesPer100k,
     casesPerWeek: district.casesPerWeek,
