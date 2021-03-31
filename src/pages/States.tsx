@@ -60,7 +60,7 @@ const PageStates: React.FC = () => {
           />
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent fullscreen>
         {states.map((i) => (
           <StateOrDistrictCard
             stateordistrict={i}

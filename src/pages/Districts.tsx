@@ -62,7 +62,7 @@ const PageDistricts: React.FC = () => {
           />
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent fullscreen>
         {search.length <= 2 ? (
           <p className="ion-padding">
             Suchbegriff länger als 3 Zeichen eingeben
