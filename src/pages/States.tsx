@@ -20,7 +20,9 @@ import { loadMoreCount } from "../const";
 import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 import { AppContext } from "../db/Store";
 
-const PageStates: React.FC = () => {
+const PageStates: React.FC<{ statesOrDistricts: "states" | "districts" }> = ({
+  statesOrDistricts = "states",
+}) => {
   const { state, dispatch } = useContext(AppContext);
   const [states, setStates] = useState<CoronaData[]>([]);
 
@@ -40,7 +42,11 @@ const PageStates: React.FC = () => {
   useEffect(() => {
     if (state.temp.cache.data) {
       let _out = state.temp.cache.data.coronaData.filter(
-        (i) => i.location === CoronaDataLocation.STATE
+        (i) =>
+          i.location ===
+          (statesOrDistricts === "states"
+            ? CoronaDataLocation.STATE
+            : CoronaDataLocation.DISTRICT)
       );
       if (search.length > 0) {
         _out = _out.filter((i) =>
@@ -51,7 +57,7 @@ const PageStates: React.FC = () => {
       setStates(_out);
     }
     setStatesRender([]);
-  }, [state, search]);
+  }, [state, search, statesOrDistricts]);
 
   useEffect(() => {
     if (statesRender.length === 0) loadMore();
@@ -64,7 +70,9 @@ const PageStates: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton routerAnimation={undefined} defaultHref="/home" />
           </IonButtons>
-          <IonTitle>Bundesländer</IonTitle>
+          <IonTitle>
+            {statesOrDistricts === "states" ? "Bundesländer" : "Landkreise"}
+          </IonTitle>
         </IonToolbar>
         <IonToolbar>
           <IonSearchbar

@@ -28,7 +28,6 @@ import { AppContextProvider } from "./db/Store";
 
 import PageHome from "./pages/Home";
 import PageStates from "./pages/States";
-import PageDistricts from "./pages/Districts";
 import Loader from "./db/loadingComponent";
 
 const App: React.FC = () => (
@@ -41,8 +40,12 @@ const App: React.FC = () => (
               <Redirect to="/home" />
             </Route>
             <Route exact path="/home" component={PageHome} />
-            <Route exact path="/states" component={PageStates} />
-            <Route exact path="/districts" component={PageDistricts} />
+            <Route exact path="/states">
+              <PageStates statesOrDistricts="states" />
+            </Route>
+            <Route exact path="/districts">
+              <PageStates statesOrDistricts="districts" />
+            </Route>
           </IonRouterOutlet>
         </IonReactRouter>
       </IonApp>
