@@ -1,9 +1,13 @@
 import { Dispatch } from "react";
 import { getCache } from "../api/api";
 import {
+  APIDistrictsResponseType,
   APIDistrictType,
+  APIGermanyType,
+  APIStatesResponseType,
   APIStateType,
-  StateOrDistrictData,
+  CoronaData,
+  CoronaDataLocation,
 } from "../api/types";
 import { ActionSetTempCache, ActionSetTempLoading } from "../db/Actions";
 import { ActionType } from "../db/types";
@@ -21,9 +25,7 @@ export const cacheDataFromAPI = async (dispatch: Dispatch<ActionType>) => {
     ]);
 };
 
-export const ConvertStateToCoronaData = (
-  state: APIStateType
-): StateOrDistrictData => {
+export const ConvertStateToCoronaData = (state: APIStateType): CoronaData => {
   return {
     cases: state.cases,
     casesPer100k: state.casesPer100k,
@@ -35,12 +37,13 @@ export const ConvertStateToCoronaData = (
     recovered: state.recovered,
     weekIncidence: state.weekIncidence,
     id: state.abbreviation,
+    location: CoronaDataLocation.STATE,
   };
 };
 
 export const ConvertDistrictToCoronaData = (
   district: APIDistrictType
-): StateOrDistrictData => {
+): CoronaData => {
   return {
     cases: district.cases,
     casesPer100k: district.casesPer100k,
@@ -52,5 +55,38 @@ export const ConvertDistrictToCoronaData = (
     recovered: district.recovered,
     weekIncidence: district.weekIncidence,
     id: district.ags,
+    location: CoronaDataLocation.DISTRICT,
   };
+};
+
+export const ConvertGermanyToCoronaData = (
+  germany: APIGermanyType
+): CoronaData => {
+  return {
+    cases: germany.cases,
+    casesPer100k: germany.casesPer100k,
+    casesPerWeek: germany.casesPerWeek,
+    deaths: germany.deaths,
+    delta: germany.delta,
+    name: "Deutschland",
+    recovered: germany.recovered,
+    weekIncidence: germany.weekIncidence,
+    id: "de",
+    location: CoronaDataLocation.GERMANY,
+    r: germany.r.value,
+  };
+};
+
+export const convertAllDistricts = (
+  data: APIDistrictsResponseType
+): CoronaData[] => {
+  return Object.keys(data.data).map((i) =>
+    ConvertDistrictToCoronaData(data.data[i])
+  );
+};
+
+export const convertAllStates = (data: APIStatesResponseType): CoronaData[] => {
+  return Object.keys(data.data).map((i) =>
+    ConvertStateToCoronaData(data.data[i])
+  );
 };

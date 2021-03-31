@@ -9,16 +9,22 @@ import {
   IonRow,
 } from "@ionic/react";
 import React from "react";
-import { StateOrDistrictData } from "../api/types";
-import { displayValue } from "../functions/rendering";
+import { CoronaData } from "../api/types";
+import { displayValue, showOrSkeleton } from "../functions/rendering";
 import { close, star, starOutline } from "ionicons/icons";
 import { getColorFromIncidence } from "../functions/incidence-color-generator";
 
 const StateOrDistrictCard: React.FC<{
-  stateordistrict: StateOrDistrictData;
+  stateordistrict?: CoronaData;
   isFavorite?: boolean;
   toggleFavorite?: () => any;
-}> = ({ stateordistrict, toggleFavorite = () => {}, isFavorite = false }) => {
+  showColor?: boolean;
+}> = ({
+  stateordistrict = undefined,
+  toggleFavorite = () => {},
+  isFavorite = false,
+  showColor = true,
+}) => {
   const showActionSheet = () => {
     const el = document.createElement("ion-action-sheet");
     el.header = "Aktionen";
@@ -36,35 +42,59 @@ const StateOrDistrictCard: React.FC<{
 
   return (
     <IonCard
-      color={getColorFromIncidence(stateordistrict.weekIncidence)}
+      color={
+        stateordistrict && showColor
+          ? getColorFromIncidence(stateordistrict.weekIncidence)
+          : ""
+      }
       onClick={showActionSheet}
     >
       <IonCardHeader>
-        <IonCardTitle>{stateordistrict.name}</IonCardTitle>
+        <IonCardTitle>{showOrSkeleton(stateordistrict?.name)}</IonCardTitle>
         <IonCardSubtitle hidden={!isFavorite}>Favorit</IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonGrid>
           <IonRow>
             <IonCol>7-Tage Inzidenz</IonCol>
-            <IonCol>{displayValue(stateordistrict.weekIncidence)}</IonCol>
+            <IonCol>
+              {showOrSkeleton(stateordistrict?.weekIncidence, displayValue)}
+            </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Fälle gesamt</IonCol>
-            <IonCol>{stateordistrict.cases}</IonCol>
+            <IonCol>
+              {showOrSkeleton(stateordistrict?.cases, displayValue)}
+            </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Todesfälle gesamt</IonCol>
-            <IonCol>{stateordistrict.deaths}</IonCol>
+            <IonCol>
+              {showOrSkeleton(stateordistrict?.deaths, displayValue)}
+            </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Neue Fälle</IonCol>
-            <IonCol>{stateordistrict.delta.cases}</IonCol>
+            <IonCol>
+              {showOrSkeleton(stateordistrict?.delta.cases, displayValue)}
+            </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Neue Todesfälle</IonCol>
-            <IonCol>{stateordistrict.delta.deaths}</IonCol>
+            <IonCol>
+              {showOrSkeleton(stateordistrict?.delta.deaths, displayValue)}
+            </IonCol>
           </IonRow>
+          {stateordistrict?.r ? (
+            <IonRow>
+              <IonCol>R Wert</IonCol>
+              <IonCol>
+                {showOrSkeleton(stateordistrict?.r, displayValue)}
+              </IonCol>
+            </IonRow>
+          ) : (
+            ""
+          )}
         </IonGrid>
       </IonCardContent>
     </IonCard>

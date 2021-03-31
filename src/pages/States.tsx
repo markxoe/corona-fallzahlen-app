@@ -11,26 +11,22 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React, { useContext, useEffect, useState } from "react";
-import { StateOrDistrictData } from "../api/types";
+import { CoronaData, CoronaDataLocation } from "../api/types";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
 import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 import { AppContext } from "../db/Store";
-import { ConvertStateToCoronaData } from "../functions/data";
 
 const PageStates: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
-  const [states, setStates] = useState<StateOrDistrictData[]>([]);
+  const [states, setStates] = useState<CoronaData[]>([]);
 
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     if (state.temp.cache.data) {
-      const keys = Object.keys(state.temp.cache.data.states.data);
-      let _out: StateOrDistrictData[] = [];
-      keys.forEach((i) => {
-        const _state = state.temp.cache.data?.states.data[i];
-        if (_state) _out = [..._out, ConvertStateToCoronaData(_state)];
-      });
+      let _out = state.temp.cache.data.coronaData.filter(
+        (i) => i.location === CoronaDataLocation.STATE
+      );
       if (search.length > 0) {
         _out = _out.filter((i) =>
           i.name.toLowerCase().includes(search.toLowerCase())
