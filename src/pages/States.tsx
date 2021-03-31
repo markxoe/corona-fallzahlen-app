@@ -43,7 +43,7 @@ const PageStates: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader translucent>
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton routerAnimation={undefined} defaultHref="/home" />
@@ -60,7 +60,7 @@ const PageStates: React.FC = () => {
           />
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent fullscreen>
         {states.map((i) => (
           <StateOrDistrictCard
             stateordistrict={i}
