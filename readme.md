@@ -60,8 +60,8 @@ Achtung: Du brauchst nen Mac und XCode
 
 ## Geplante tolle Dinge
 
-- [ ] Infinity Scroll
-- [x] Favoriten
+- [ ] Gestern-heute Vergleich
+- [ ] Impfübersicht
 
 ## Lizenz
 
