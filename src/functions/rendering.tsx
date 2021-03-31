@@ -24,5 +24,9 @@ export const showOrSkeleton = (
   whattoshow: any,
   middleware: (input: any) => any = (i) => i
 ) => {
-  return whattoshow ? middleware(whattoshow) : <IonSkeletonText animated />;
+  return whattoshow !== undefined && whattoshow !== null ? (
+    middleware(whattoshow)
+  ) : (
+    <IonSkeletonText animated />
+  );
 };
