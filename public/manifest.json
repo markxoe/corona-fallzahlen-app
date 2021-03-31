@@ -46,5 +46,7 @@
     }
   ],
   "orientation": "portrait-primary",
-  "categories": ["covid", "covid-19", "coronavirus"]
+  "categories": ["covid", "covid-19", "coronavirus"],
+  "lang": "de",
+  "description": "Einfache Open Source Fallzahlen App"
 }
