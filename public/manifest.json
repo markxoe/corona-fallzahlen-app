@@ -18,5 +18,33 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#1f1f1f",
-  "background_color": "#121212"
+  "background_color": "#121212",
+  "shortcuts": [
+    {
+      "name": "Landkreise",
+      "description": "Schau dir die Landkreise an",
+      "url": "/districts",
+      "icons": [
+        {
+          "src": "assets/icon/icon.png",
+          "type": "image/png",
+          "sizes": "512x512"
+        }
+      ]
+    },
+    {
+      "name": "Bundesländer",
+      "description": "Schau dir die Bundesländer an",
+      "url": "/states",
+      "icons": [
+        {
+          "src": "assets/icon/icon.png",
+          "type": "image/png",
+          "sizes": "512x512"
+        }
+      ]
+    }
+  ],
+  "orientation": "portrait-primary",
+  "categories": ["covid", "covid-19", "coronavirus"]
 }
