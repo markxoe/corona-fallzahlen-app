@@ -6,11 +6,16 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
+  IonIcon,
   IonRow,
 } from "@ionic/react";
 import React from "react";
 import { CoronaData } from "../api/types";
-import { displayValue, showOrSkeleton } from "../functions/rendering";
+import {
+  displayValue,
+  numberToStringWithThousands,
+  showOrSkeleton,
+} from "../functions/rendering";
 import { close, star, starOutline } from "ionicons/icons";
 import { getColorFromIncidence } from "../functions/incidence-color-generator";
 
@@ -50,8 +55,16 @@ const StateOrDistrictCard: React.FC<{
       onClick={showActionSheet}
     >
       <IonCardHeader>
-        <IonCardTitle>{showOrSkeleton(stateordistrict?.name)}</IonCardTitle>
-        <IonCardSubtitle hidden={!isFavorite}>Favorit</IonCardSubtitle>
+        <IonCardTitle>
+          {showOrSkeleton(stateordistrict?.name)}{" "}
+          <span>
+            <IonIcon size="small" icon={isFavorite ? star : starOutline} />
+          </span>{" "}
+        </IonCardTitle>
+        <IonCardSubtitle hidden={!stateordistrict?.population}>
+          {numberToStringWithThousands(stateordistrict?.population ?? 0)}{" "}
+          Einwohner
+        </IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonGrid>
