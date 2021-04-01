@@ -10,7 +10,7 @@ import {
   IonRow,
 } from "@ionic/react";
 import React from "react";
-import { CoronaData } from "../api/types";
+import { CoronaData, CoronaDataLocation } from "../api/types";
 import {
   displayValue,
   numberToStringWithThousands,
@@ -31,18 +31,23 @@ const StateOrDistrictCard: React.FC<{
   showColor = true,
 }) => {
   const showActionSheet = () => {
-    const el = document.createElement("ion-action-sheet");
-    el.header = "Aktionen";
-    el.buttons = [
-      {
-        text: isFavorite ? "Favorit entfernen" : "Favorit erstellen",
-        handler: () => toggleFavorite(),
-        icon: isFavorite ? star : starOutline,
-      },
-      { text: "Abbrechen", role: "cancel", icon: close },
-    ];
-    el.present();
-    document.body.appendChild(el);
+    if (
+      stateordistrict?.location === CoronaDataLocation.DISTRICT ||
+      stateordistrict?.location === CoronaDataLocation.STATE
+    ) {
+      const el = document.createElement("ion-action-sheet");
+      el.header = "Aktionen";
+      el.buttons = [
+        {
+          text: isFavorite ? "Favorit entfernen" : "Favorit erstellen",
+          handler: () => toggleFavorite(),
+          icon: isFavorite ? star : starOutline,
+        },
+        { text: "Abbrechen", role: "cancel", icon: close },
+      ];
+      el.present();
+      document.body.appendChild(el);
+    }
   };
 
   return (
@@ -57,7 +62,12 @@ const StateOrDistrictCard: React.FC<{
       <IonCardHeader>
         <IonCardTitle>
           {showOrSkeleton(stateordistrict?.name)}{" "}
-          <span>
+          <span
+            hidden={
+              stateordistrict?.location !== CoronaDataLocation.DISTRICT &&
+              stateordistrict?.location !== CoronaDataLocation.STATE
+            }
+          >
             <IonIcon size="small" icon={isFavorite ? star : starOutline} />
           </span>{" "}
         </IonCardTitle>
