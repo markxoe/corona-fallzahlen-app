@@ -4,7 +4,7 @@ export const displayValue = (value: number) => {
   if (value % 1 === 0) {
     return value.toFixed(0);
   } else {
-    return value.toFixed(2);
+    return value.toFixed(2).replaceAll(".", ",");
   }
 };
 

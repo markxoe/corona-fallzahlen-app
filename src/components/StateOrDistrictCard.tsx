@@ -77,25 +77,37 @@ const StateOrDistrictCard: React.FC<{
           <IonRow>
             <IonCol>Fälle gesamt</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(stateordistrict?.cases, displayValue)}
+              {showOrSkeleton(
+                stateordistrict?.cases,
+                numberToStringWithThousands
+              )}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Todesfälle gesamt</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(stateordistrict?.deaths, displayValue)}
+              {showOrSkeleton(
+                stateordistrict?.deaths,
+                numberToStringWithThousands
+              )}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Neue Fälle</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(stateordistrict?.delta.cases, displayValue)}
+              {showOrSkeleton(
+                stateordistrict?.delta.cases,
+                numberToStringWithThousands
+              )}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Neue Todesfälle</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(stateordistrict?.delta.deaths, displayValue)}
+              {showOrSkeleton(
+                stateordistrict?.delta.deaths,
+                numberToStringWithThousands
+              )}
             </IonCol>
           </IonRow>
           {stateordistrict?.r ? (
