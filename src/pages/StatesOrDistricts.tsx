@@ -52,6 +52,7 @@ const PageStatesOrDistricts: React.FC<{
   };
 
   useEffect(() => {
+    let statesOrDistrictsDataTemp: CoronaData[] = statesOrDistrictsData;
     if (state.temp.cache.data) {
       let _out = state.temp.cache.data.coronaData.filter(
         (i) =>
@@ -69,9 +70,10 @@ const PageStatesOrDistricts: React.FC<{
         (a.nameToSort ?? a.name).localeCompare(b.nameToSort ?? b.name)
       );
       setstatesOrDistrictsData(_out);
+      statesOrDistrictsDataTemp = _out;
     }
     setstatesOrDistrictsDataRender(
-      statesOrDistrictsData.slice(0, statesOrDistrictsDataRender.length)
+      statesOrDistrictsDataTemp.slice(0, statesOrDistrictsDataRender.length)
     );
   }, [state, search, statesOrDistricts]); // eslint-disable-line
 
