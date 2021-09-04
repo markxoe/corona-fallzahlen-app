@@ -14,7 +14,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React, { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router";
+
 import { CoronaData, CoronaDataLocation } from "../api/types";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
 import { loadMoreCount } from "../const";
@@ -24,7 +24,6 @@ import { AppContext } from "../db/Store";
 const PageStatesOrDistricts: React.FC<{
   statesOrDistricts: "states" | "districts";
 }> = ({ statesOrDistricts = "states" }) => {
-  const history = useHistory();
   const { state, dispatch } = useContext(AppContext);
   const [statesOrDistrictsData, setstatesOrDistrictsData] = useState<
     CoronaData[]
@@ -53,6 +52,7 @@ const PageStatesOrDistricts: React.FC<{
   };
 
   useEffect(() => {
+    let statesOrDistrictsDataTemp: CoronaData[] = statesOrDistrictsData;
     if (state.temp.cache.data) {
       let _out = state.temp.cache.data.coronaData.filter(
         (i) =>
@@ -70,9 +70,12 @@ const PageStatesOrDistricts: React.FC<{
         (a.nameToSort ?? a.name).localeCompare(b.nameToSort ?? b.name)
       );
       setstatesOrDistrictsData(_out);
+      statesOrDistrictsDataTemp = _out;
     }
-    setstatesOrDistrictsDataRender([]);
-  }, [state, search, statesOrDistricts]);
+    setstatesOrDistrictsDataRender(
+      statesOrDistrictsDataTemp.slice(0, statesOrDistrictsDataRender.length)
+    );
+  }, [state, search, statesOrDistricts]); // eslint-disable-line
 
   useEffect(() => {
     if (statesOrDistrictsDataRender.length === 0) loadMore();
@@ -106,7 +109,6 @@ const PageStatesOrDistricts: React.FC<{
             stateordistrict={i}
             isFavorite={state.favorites.includes(i.id ?? "")}
             toggleFavorite={() => {
-              history.goBack();
               state.favorites.includes(i.id ?? "")
                 ? dispatch(ActionRemoveFavorite(i.id ?? ""))
                 : dispatch(ActionAddFavorite(i.id ?? ""));

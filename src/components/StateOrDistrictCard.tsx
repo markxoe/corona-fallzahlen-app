@@ -6,11 +6,16 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
+  IonIcon,
   IonRow,
 } from "@ionic/react";
 import React from "react";
-import { CoronaData } from "../api/types";
-import { displayValue, showOrSkeleton } from "../functions/rendering";
+import { CoronaData, CoronaDataLocation } from "../api/types";
+import {
+  displayValue,
+  numberToStringWithThousands,
+  showOrSkeleton,
+} from "../functions/rendering";
 import { close, star, starOutline } from "ionicons/icons";
 import { getColorFromIncidence } from "../functions/incidence-color-generator";
 
@@ -26,18 +31,23 @@ const StateOrDistrictCard: React.FC<{
   showColor = true,
 }) => {
   const showActionSheet = () => {
-    const el = document.createElement("ion-action-sheet");
-    el.header = "Aktionen";
-    el.buttons = [
-      {
-        text: isFavorite ? "Favorit entfernen" : "Favorit erstellen",
-        handler: () => toggleFavorite(),
-        icon: isFavorite ? star : starOutline,
-      },
-      { text: "Abbrechen", role: "cancel", icon: close },
-    ];
-    el.present();
-    document.body.appendChild(el);
+    if (
+      stateordistrict?.location === CoronaDataLocation.DISTRICT ||
+      stateordistrict?.location === CoronaDataLocation.STATE
+    ) {
+      const el = document.createElement("ion-action-sheet");
+      el.header = "Aktionen";
+      el.buttons = [
+        {
+          text: isFavorite ? "Favorit entfernen" : "Favorit erstellen",
+          handler: () => toggleFavorite(),
+          icon: isFavorite ? star : starOutline,
+        },
+        { text: "Abbrechen", role: "cancel", icon: close },
+      ];
+      el.present();
+      document.body.appendChild(el);
+    }
   };
 
   return (
@@ -50,8 +60,21 @@ const StateOrDistrictCard: React.FC<{
       onClick={showActionSheet}
     >
       <IonCardHeader>
-        <IonCardTitle>{showOrSkeleton(stateordistrict?.name)}</IonCardTitle>
-        <IonCardSubtitle hidden={!isFavorite}>Favorit</IonCardSubtitle>
+        <IonCardTitle>
+          {showOrSkeleton(stateordistrict?.name)}{" "}
+          <span
+            hidden={
+              stateordistrict?.location !== CoronaDataLocation.DISTRICT &&
+              stateordistrict?.location !== CoronaDataLocation.STATE
+            }
+          >
+            <IonIcon size="small" icon={isFavorite ? star : starOutline} />
+          </span>{" "}
+        </IonCardTitle>
+        <IonCardSubtitle hidden={!stateordistrict?.population}>
+          {numberToStringWithThousands(stateordistrict?.population ?? 0)}{" "}
+          Einwohner
+        </IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonGrid>
@@ -64,25 +87,37 @@ const StateOrDistrictCard: React.FC<{
           <IonRow>
             <IonCol>Fälle gesamt</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(stateordistrict?.cases, displayValue)}
+              {showOrSkeleton(
+                stateordistrict?.cases,
+                numberToStringWithThousands
+              )}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Todesfälle gesamt</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(stateordistrict?.deaths, displayValue)}
+              {showOrSkeleton(
+                stateordistrict?.deaths,
+                numberToStringWithThousands
+              )}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Neue Fälle</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(stateordistrict?.delta.cases, displayValue)}
+              {showOrSkeleton(
+                stateordistrict?.delta.cases,
+                numberToStringWithThousands
+              )}
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>Neue Todesfälle</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(stateordistrict?.delta.deaths, displayValue)}
+              {showOrSkeleton(
+                stateordistrict?.delta.deaths,
+                numberToStringWithThousands
+              )}
             </IonCol>
           </IonRow>
           {stateordistrict?.r ? (

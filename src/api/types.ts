@@ -109,4 +109,5 @@ export interface CoronaData {
   id: string;
   location: CoronaDataLocation;
   r?: number;
+  population?: number;
 }

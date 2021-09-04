@@ -38,6 +38,7 @@ export const ConvertStateToCoronaData = (state: APIStateType): CoronaData => {
     weekIncidence: state.weekIncidence,
     id: state.abbreviation,
     location: CoronaDataLocation.STATE,
+    population: state.population,
   };
 };
 
@@ -57,6 +58,7 @@ export const ConvertDistrictToCoronaData = (
     weekIncidence: district.weekIncidence,
     id: district.ags,
     location: CoronaDataLocation.DISTRICT,
+    population: district.population,
   };
 };
 

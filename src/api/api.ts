@@ -14,7 +14,7 @@ import {
   APIMetaType,
 } from "./types";
 
-export const baseURL = "https://api.corona-zahlen.org/";
+export const baseURL = "https://api.cfz.toastbrot.org/";
 export const axiosConfig: AxiosRequestConfig = { timeout: 3000 };
 
 export const getStates = async (): Promise<APIResponseType<CoronaData[]>> => {
@@ -119,7 +119,7 @@ export const getMap = async (
   stateOrDistrict: "states" | "districts"
 ): Promise<APIResponseType<string>> => {
   return await axios
-    .get("https://api.corona-zahlen.org/map/" + stateOrDistrict, {
+    .get(baseURL + "map/" + stateOrDistrict, {
       responseType: "arraybuffer",
     })
     .then((r) => {
