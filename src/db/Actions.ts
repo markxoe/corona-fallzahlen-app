@@ -1,8 +1,8 @@
 import { APICacheType, APIVaccinations } from "../api/types";
 import { ActionType, StateType } from "./types";
 
-export const ActionSetTempLoading = (loaded: boolean): ActionType => ({
-  type: "setTempLoading",
+export const ActionSetTempLoaded = (loaded: boolean): ActionType => ({
+  type: "setTempLoaded",
   payload: loaded,
 });
 

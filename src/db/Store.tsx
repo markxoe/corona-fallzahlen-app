@@ -2,12 +2,13 @@ import { createContext, FC, useReducer } from "react";
 import { ActionType, ContextType, StateType } from "./types";
 
 import { Storage } from "@capacitor/storage";
+import moment from "moment";
 
 export const AppContext = createContext<ContextType>({} as ContextType);
 
 export const initialState: StateType = {
   temp: {
-    loading: true,
+    loaded: false,
     cache: {},
   },
   favorites: [],
@@ -16,8 +17,8 @@ export const initialState: StateType = {
 
 const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
-    case "setTempLoading": {
-      return { ...state, temp: { ...state.temp, loading: action.payload } };
+    case "setTempLoaded": {
+      return { ...state, temp: { ...state.temp, loaded: action.payload } };
     }
     case "setTempCache": {
       return { ...state, temp: { ...state.temp, cache: action.payload } };
@@ -34,7 +35,6 @@ const reducer = (state: StateType, action: ActionType): StateType => {
     case "setState": {
       return {
         ...action.payload,
-        temp: state.temp,
       };
     }
     case "setLoaded": {
@@ -57,7 +57,7 @@ export const AppContextProvider: FC = (props: any) => {
 };
 
 export const saveData = (state: StateType) => {
-  const toSave: StateType = { ...state, temp: initialState.temp };
+  const toSave: StateType = { ...state };
 
   Storage.set({
     key: "corona-fallzahlen-app-state",
@@ -65,11 +65,23 @@ export const saveData = (state: StateType) => {
   });
 };
 
+export const isTempFromToday = (temp: StateType["temp"]): boolean => {
+  if (!temp.loaded) return false;
+  if (!temp.cache.data) return false;
+  if (!temp.vaccination) return false;
+  const date = temp.cache.data.meta.lastUpdate;
+  return moment(date).isSame(moment(), "date");
+};
+
 export const loadData = async (): Promise<StateType> => {
   return await Storage.get({ key: "corona-fallzahlen-app-state" })
     .then((d) => {
       if (d.value && d.value !== "") {
-        return { ...initialState, ...JSON.parse(d.value) };
+        const newData = JSON.parse(d.value) as StateType;
+
+        if (!isTempFromToday(newData.temp)) newData.temp = initialState.temp;
+
+        return { ...initialState, ...newData };
       } else {
         return initialState;
       }

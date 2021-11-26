@@ -119,7 +119,7 @@ const PageStatesOrDistricts: React.FC<{
         </IonButton>
       </IonContent>
       <IonFooter>
-        <IonProgressBar hidden={!state.temp.loading} type="indeterminate" />
+        <IonProgressBar hidden={state.temp.loaded} type="indeterminate" />
       </IonFooter>
     </IonPage>
   );

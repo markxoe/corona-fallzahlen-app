@@ -18,6 +18,6 @@ export interface ActionType {
 
 export interface TempType {
   cache: APICacheType;
-  loading: boolean;
+  loaded: boolean;
   vaccination?: APIVaccinations;
 }
