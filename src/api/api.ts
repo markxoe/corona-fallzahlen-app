@@ -12,6 +12,8 @@ import {
   APICacheType,
   CoronaData,
   APIMetaType,
+  APIVaccinations,
+  APIRawReturn,
 } from "./types";
 
 export const baseURL = "https://api.cfz.toastbrot.org/";
@@ -68,6 +70,14 @@ export const getGermany = async (): Promise<APIResponseType<CoronaData>> => {
     });
 
   return response;
+};
+
+export const getVaccinations = async () => {
+  return axios
+    .get<APIRawReturn<APIVaccinations>>(baseURL + "germany", axiosConfig)
+    .catch(() => {
+      return undefined;
+    });
 };
 
 export const getMeta = async (): Promise<APIResponseType<APIMetaType>> => {

@@ -39,6 +39,7 @@ export const ConvertStateToCoronaData = (state: APIStateType): CoronaData => {
     id: state.abbreviation,
     location: CoronaDataLocation.STATE,
     population: state.population,
+    hospitalization: state.hospitalization,
   };
 };
 
@@ -77,6 +78,7 @@ export const ConvertGermanyToCoronaData = (
     id: "de",
     location: CoronaDataLocation.GERMANY,
     r: germany.r.value,
+    hospitalization: germany.hospitalization,
   };
 };
 
