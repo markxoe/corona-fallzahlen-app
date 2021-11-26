@@ -28,7 +28,7 @@ const PageStatesOrDistricts: React.FC<{
     CoronaData[]
   >([]);
 
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string | null | undefined>("");
 
   const [statesOrDistrictsDataRender, setstatesOrDistrictsDataRender] =
     useState<CoronaData[]>([]);
@@ -49,29 +49,28 @@ const PageStatesOrDistricts: React.FC<{
   };
 
   useEffect(() => {
-    let statesOrDistrictsDataTemp: CoronaData[] = statesOrDistrictsData;
     if (state.temp.cache.data) {
       let _out = state.temp.cache.data.coronaData.filter(
         (i) =>
           i.location ===
-          (statesOrDistricts === "states"
-            ? CoronaDataLocation.STATE
-            : CoronaDataLocation.DISTRICT)
+            (statesOrDistricts === "states"
+              ? CoronaDataLocation.STATE
+              : CoronaDataLocation.DISTRICT) &&
+          (search?.length
+            ? i.name.toLowerCase().includes(search.toLowerCase())
+            : true)
       );
-      if (search.length > 0) {
-        _out = _out.filter((i) =>
-          i.name.toLowerCase().includes(search.toLowerCase())
-        );
-      }
+
       _out = _out.sort((a, b) =>
         (a.nameToSort ?? a.name).localeCompare(b.nameToSort ?? b.name)
       );
       setstatesOrDistrictsData(_out);
-      statesOrDistrictsDataTemp = _out;
+      setstatesOrDistrictsDataRender(_out.slice(0, 5));
+      setInfinityDisabled(_out.length <= 5);
+    } else {
+      setstatesOrDistrictsData([]);
+      setstatesOrDistrictsDataRender([]);
     }
-    setstatesOrDistrictsDataRender(
-      statesOrDistrictsDataTemp.slice(0, statesOrDistrictsDataRender.length)
-    );
   }, [state, search, statesOrDistricts]); // eslint-disable-line
 
   useEffect(() => {
@@ -92,10 +91,9 @@ const PageStatesOrDistricts: React.FC<{
         <IonToolbar>
           <IonSearchbar
             onIonChange={(e) => {
-              setSearch(e.detail.value ?? "");
+              setSearch(e.detail.value);
             }}
             placeholder="Suche"
-            value={search}
           />
         </IonToolbar>
       </IonHeader>
