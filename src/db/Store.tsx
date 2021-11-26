@@ -1,7 +1,7 @@
 import { createContext, FC, useReducer } from "react";
 import { ActionType, ContextType, StateType } from "./types";
 
-import { Plugins } from "@capacitor/core";
+import { Storage } from "@capacitor/storage";
 
 export const AppContext = createContext<ContextType>({} as ContextType);
 
@@ -56,14 +56,14 @@ export const AppContextProvider: FC = (props: any) => {
 export const saveData = (state: StateType) => {
   const toSave: StateType = { ...state, temp: initialState.temp };
 
-  Plugins.Storage.set({
+  Storage.set({
     key: "corona-fallzahlen-app-state",
     value: JSON.stringify(toSave),
   });
 };
 
 export const loadData = async (): Promise<StateType> => {
-  return await Plugins.Storage.get({ key: "corona-fallzahlen-app-state" })
+  return await Storage.get({ key: "corona-fallzahlen-app-state" })
     .then((d) => {
       if (d.value && d.value !== "") {
         return { ...initialState, ...JSON.parse(d.value) };
