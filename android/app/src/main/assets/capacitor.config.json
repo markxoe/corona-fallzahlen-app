@@ -1,6 +1,6 @@
 {
-	"appId": "com.capacitorjs.app.testapp",
-	"appName": "capacitor-testapp",
+	"appId": "org.toastbrot.covidcases",
+	"appName": "Einfache Fallzahlen",
 	"webDir": "build",
 	"plugins": {
 		"SplashScreen": {
