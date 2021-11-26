@@ -25,7 +25,6 @@ import { showOrSkeleton } from "../functions/rendering";
 import packageJSON from "../../package.json";
 import { CoronaData, CoronaDataLocation } from "../api/types";
 import { cacheDataFromAPI } from "../functions/data";
-import { ActionRemoveFavorite } from "../db/Actions";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
 import { arrowForward, map } from "ionicons/icons";
 
@@ -89,14 +88,8 @@ const PageHome: React.FC = () => {
             </IonCol>
 
             {favorites.map((i) => (
-              <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
-                <StateOrDistrictCard
-                  stateordistrict={i}
-                  isFavorite={true}
-                  toggleFavorite={() =>
-                    dispatch(ActionRemoveFavorite(i.id ?? ""))
-                  }
-                />
+              <IonCol key={i.id} size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
+                <StateOrDistrictCard stateordistrict={i} />
               </IonCol>
             ))}
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
@@ -114,9 +107,9 @@ const PageHome: React.FC = () => {
                     Landkreise <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                {state.temp.cache.data ? (
+                {state.temp.cache.data?.districtsMap ? (
                   <img
-                    src={state.temp.cache.data?.districtsMap ?? ""}
+                    src={state.temp.cache.data?.districtsMap}
                     className="lil-img-padding"
                     alt="Corona Landkarte Landkreise"
                   />
@@ -134,9 +127,9 @@ const PageHome: React.FC = () => {
                     Bundesländer <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                {state.temp.cache.data ? (
+                {state.temp.cache.data?.statesMap ? (
                   <img
-                    src={state.temp.cache.data?.statesMap ?? ""}
+                    src={state.temp.cache.data?.statesMap}
                     className="lil-img-padding"
                     alt="Corona Landkarte Bundesländer"
                   />

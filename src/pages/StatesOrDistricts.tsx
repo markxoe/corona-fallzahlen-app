@@ -18,23 +18,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { CoronaData, CoronaDataLocation } from "../api/types";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
 import { loadMoreCount } from "../const";
-import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 import { AppContext } from "../db/Store";
 
 const PageStatesOrDistricts: React.FC<{
   statesOrDistricts: "states" | "districts";
 }> = ({ statesOrDistricts = "states" }) => {
-  const { state, dispatch } = useContext(AppContext);
+  const { state } = useContext(AppContext);
   const [statesOrDistrictsData, setstatesOrDistrictsData] = useState<
     CoronaData[]
   >([]);
 
   const [search, setSearch] = useState<string>("");
 
-  const [
-    statesOrDistrictsDataRender,
-    setstatesOrDistrictsDataRender,
-  ] = useState<CoronaData[]>([]);
+  const [statesOrDistrictsDataRender, setstatesOrDistrictsDataRender] =
+    useState<CoronaData[]>([]);
   const [infinityDisabled, setInfinityDisabled] = useState<boolean>(false);
 
   const loadMore = () => {
@@ -104,16 +101,7 @@ const PageStatesOrDistricts: React.FC<{
       </IonHeader>
       <IonContent fullscreen>
         {statesOrDistrictsDataRender.map((i) => (
-          <StateOrDistrictCard
-            key={i.id}
-            stateordistrict={i}
-            isFavorite={state.favorites.includes(i.id ?? "")}
-            toggleFavorite={() => {
-              state.favorites.includes(i.id ?? "")
-                ? dispatch(ActionRemoveFavorite(i.id ?? ""))
-                : dispatch(ActionAddFavorite(i.id ?? ""));
-            }}
-          />
+          <StateOrDistrictCard key={i.id} stateordistrict={i} />
         ))}
         <IonInfiniteScroll
           disabled={infinityDisabled}

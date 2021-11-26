@@ -20,9 +20,7 @@ export const cacheDataFromAPI = async (dispatch: Dispatch<ActionType>) => {
   dispatch(ActionSetTempLoading(false));
 
   if (!_data.data)
-    makeToast("Fehler beim Laden, versuch's später wieder", [
-      { text: "Ok schade" },
-    ]);
+    makeToast("Fehler beim Laden, versuch's später nochmal", [{ text: "Ok" }]);
 };
 
 export const ConvertStateToCoronaData = (state: APIStateType): CoronaData => {
