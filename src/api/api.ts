@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import {
   convertAllDistricts,
   convertAllStates,
@@ -12,85 +12,76 @@ import {
   APICacheType,
   CoronaData,
   APIMetaType,
+  APIVaccinationsResponseType,
 } from "./types";
 
 export const baseURL = "https://api.cfz.toastbrot.org/";
 export const axiosConfig: AxiosRequestConfig = { timeout: 3000 };
 
-export const getStates = async (): Promise<APIResponseType<CoronaData[]>> => {
-  const response: APIResponseType<APIStatesResponseType> = await axios
-    .get(baseURL + "states", axiosConfig)
-    .then((r: AxiosResponse<APIStatesResponseType>) => {
-      if (r.status === 200) {
-        return { ok: true, data: r.data };
-      } else {
-        return {};
-      }
-    })
-    .catch(() => {
-      return {};
-    });
+//#region API Raw functions
 
-  return response.data ? { data: convertAllStates(response.data) } : {};
+export const getStates = () =>
+  axios
+    .get<APIStatesResponseType>(baseURL + "states", axiosConfig)
+    .catch(() => undefined);
+
+export const getDistricts = () =>
+  axios
+    .get<APIDistrictsResponseType>(baseURL + "districts", axiosConfig)
+    .catch(() => undefined);
+
+export const getGermany = async () => {
+  return axios
+    .get<APIGermanyResponseType>(baseURL + "germany", axiosConfig)
+    .catch(() => undefined);
 };
 
-export const getDistricts = async (): Promise<
+export const getVaccinations = async () => {
+  return axios
+    .get<APIVaccinationsResponseType>(baseURL + "vaccinations", axiosConfig)
+    .catch(() => undefined);
+};
+
+//#endregion
+
+//#region API Converters
+export const getStatesCoronaData = async (): Promise<
   APIResponseType<CoronaData[]>
 > => {
-  const response: APIResponseType<APIDistrictsResponseType> = await axios
-    .get(baseURL + "districts", axiosConfig)
-    .then((r: AxiosResponse<APIDistrictsResponseType>) => {
-      if (r.status === 200) {
-        return { data: r.data };
-      } else {
-        return {};
-      }
-    })
-    .catch(() => {
-      return {};
-    });
-
-  return response.data ? { data: convertAllDistricts(response.data) } : {};
+  const states = await getStates();
+  if (!states) return {};
+  return { data: convertAllStates(states.data) };
 };
 
-export const getGermany = async (): Promise<APIResponseType<CoronaData>> => {
-  const response: APIResponseType<CoronaData> = await axios
-    .get(baseURL + "germany", axiosConfig)
-    .then((r: AxiosResponse<APIGermanyResponseType>) => {
-      if (r.status === 200) {
-        return { data: ConvertGermanyToCoronaData(r.data) };
-      } else {
-        return {};
-      }
-    })
-    .catch(() => {
-      return {};
-    });
+export const getDistrictsCoronaData = async (): Promise<
+  APIResponseType<CoronaData[]>
+> => {
+  const districts = await getDistricts();
+  if (!districts) return {};
+  return { data: convertAllDistricts(districts.data) };
+};
 
-  return response;
+export const getGermanyCoronaData = async (): Promise<
+  APIResponseType<CoronaData>
+> => {
+  const germany = await getGermany();
+  console.log({ germany });
+  if (!germany) return {};
+  return { data: ConvertGermanyToCoronaData(germany.data) };
 };
 
 export const getMeta = async (): Promise<APIResponseType<APIMetaType>> => {
-  const response: APIResponseType<APIMetaType> = await axios
-    .get(baseURL + "germany", axiosConfig)
-    .then((r: AxiosResponse<APIGermanyResponseType>) => {
-      if (r.status === 200) {
-        return { data: r.data.meta };
-      } else {
-        return {};
-      }
-    })
-    .catch(() => {
-      return {};
-    });
-
-  return response;
+  const germany = await getGermany();
+  if (!germany) return {};
+  return { data: germany.data.meta };
 };
 
+//#endregion
+
 export const getCache = async (): Promise<APICacheType> => {
-  const germany = await getGermany();
-  const districts = await getDistricts();
-  const states = await getStates();
+  const germany = await getGermanyCoronaData();
+  const districts = await getDistrictsCoronaData();
+  const states = await getStatesCoronaData();
   const meta = await getMeta();
 
   const statesMap = await getMap("states");

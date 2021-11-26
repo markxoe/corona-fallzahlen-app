@@ -4,6 +4,12 @@ import { ActionSetLoaded, ActionSetState } from "./Actions";
 import { AppContext, loadData, saveData } from "./Store";
 
 const Loader: React.FC = ({ children }) => {
+  useLoadState();
+
+  return <>{children}</>;
+};
+
+export const useLoadState = () => {
   const { state, dispatch } = useContext(AppContext);
   const load = async () => {
     await loadData().then((d) => {
@@ -20,7 +26,6 @@ const Loader: React.FC = ({ children }) => {
   useEffect(() => {
     if (state.dataLoadedFromStore) saveData(state);
   }, [state]);
-
-  return <>{children}</>;
 };
+
 export default Loader;

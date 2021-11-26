@@ -9,7 +9,7 @@ import {
   IonIcon,
   IonRow,
 } from "@ionic/react";
-import React from "react";
+import React, { useContext } from "react";
 import { CoronaData, CoronaDataLocation } from "../api/types";
 import {
   displayValue,
@@ -18,18 +18,17 @@ import {
 } from "../functions/rendering";
 import { close, star, starOutline } from "ionicons/icons";
 import { getColorFromIncidence } from "../functions/incidence-color-generator";
+import { AppContext } from "../db/Store";
+import { ActionAddFavorite, ActionRemoveFavorite } from "../db/Actions";
 
 const StateOrDistrictCard: React.FC<{
   stateordistrict?: CoronaData;
-  isFavorite?: boolean;
-  toggleFavorite?: () => any;
   showColor?: boolean;
-}> = ({
-  stateordistrict = undefined,
-  toggleFavorite = () => {},
-  isFavorite = false,
-  showColor = true,
-}) => {
+}> = ({ stateordistrict = undefined, showColor = true }) => {
+  const { state, dispatch } = useContext(AppContext);
+
+  const isFavorite = state.favorites.find((i) => i === stateordistrict?.id);
+
   const showActionSheet = () => {
     if (
       stateordistrict?.location === CoronaDataLocation.DISTRICT ||
@@ -39,8 +38,18 @@ const StateOrDistrictCard: React.FC<{
       el.header = "Aktionen";
       el.buttons = [
         {
-          text: isFavorite ? "Favorit entfernen" : "Favorit erstellen",
-          handler: () => toggleFavorite(),
+          text: stateordistrict
+            ? isFavorite
+              ? "Favorit entfernen"
+              : "Favorit erstellen"
+            : "Nicht geladen",
+          handler: () =>
+            stateordistrict &&
+            dispatch(
+              isFavorite
+                ? ActionRemoveFavorite(stateordistrict.id)
+                : ActionAddFavorite(stateordistrict.id)
+            ),
           icon: isFavorite ? star : starOutline,
         },
         { text: "Abbrechen", role: "cancel", icon: close },

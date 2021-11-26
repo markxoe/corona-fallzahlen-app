@@ -1,3 +1,4 @@
+//#region RAW API Types
 export interface APIMetaType {
   source: string;
   contact: string;
@@ -19,6 +20,7 @@ export interface APIStateType {
   weekIncidence: number;
   casesPer100k: number;
   delta: { cases: number; deaths: number; recovered: number };
+  hospitalization: CoronaHospitalization;
 }
 
 export interface APIDistrictType {
@@ -50,31 +52,80 @@ export interface APIGermanyType {
   };
   r: {
     value: number;
-    date: Date;
+    lastUpdate: Date;
   };
+  hospitalization: CoronaHospitalization;
 }
+
+export interface APIVaccinations {
+  administeredVaccinations: number; // Sum of first and second dose
+  vaccinated: number; // Number of fist dose
+  delta: number; // New first dose vaccinations compared to yesterday
+  quote: number; // Quote of first vaccinated people
+  vaccination: {
+    biontech: number; // Number of people who were vaccinated with BioNTech
+    moderna: number; // Number of people who were vaccinated with Moderna
+    astraZeneca: number; // Number of people who were vaccinated with AstraZeneca
+    jannsen: number; // Number of people who were vaccinated with Janssen
+  };
+  secondVaccination: {
+    vaccinated: number; // Number of people who got the second vaccination
+    vaccination: {
+      biontech: number; // Number of people who received their second dose of BioNTech
+      moderna: number; // Number of people who received their second dose of Moderna
+      astraZeneca: number; // Number of people who received their second dose of AstraZeneca
+    };
+    delta: number; // New second vaccinations compared to yesterday
+    quote: number; // Quote of full vaccinated people
+  };
+  boosterVaccination: {
+    vaccinated: number; // Number of people who received their booster dose
+    vaccination: {
+      biontech: number; // Number of people who received their booster dose of BioNTech
+      moderna: number; // Number of people who received their booster dose of Moderna
+      jannsen: number; // Number of people who received their booster dose of Janssen
+    };
+    delta: number; // New booster vaccinations compared to yesterday
+    quote: number; // Quote of boosted people
+  };
+  latestDailyVaccinations: {
+    date: string;
+    vaccinated: number;
+    firstVaccination: number;
+    secondVaccination: string;
+    boosterVaccination: number;
+  };
+  states: any;
+}
+
+//#endregion
+
+//#region API Response Types
 
 export interface APIGermanyResponseType extends APIGermanyType {
   meta: APIMetaType;
 }
 
-export interface APIStatesResponseType {
-  meta: APIMetaType;
-  data: {
-    [key: string]: APIStateType;
-  };
-}
+export type APIStatesResponseType = APIRawReturn<{
+  [key: string]: APIStateType;
+}>;
 
-export interface APIDistrictsResponseType {
-  meta: APIMetaType;
-  data: {
-    [key: string]: APIDistrictType;
-  };
-}
+export type APIDistrictsResponseType = APIRawReturn<{
+  [key: string]: APIDistrictType;
+}>;
+
+export type APIVaccinationsResponseType = APIRawReturn<APIVaccinations>;
 
 export interface APIResponseType<T> {
   data?: T;
 }
+
+export interface APIRawReturn<T> {
+  data: T;
+  meta: APIMetaType;
+}
+
+//#endregion
 
 export interface APICacheType {
   data?: {
@@ -89,6 +140,13 @@ export enum CoronaDataLocation {
   DISTRICT = "district",
   STATE = "state",
   GERMANY = "germany",
+}
+
+export interface CoronaHospitalization {
+  cases7Days: number;
+  incidence7Days: number;
+  date: string;
+  lastUpdate: string;
 }
 
 export interface CoronaData {
@@ -110,4 +168,5 @@ export interface CoronaData {
   location: CoronaDataLocation;
   r?: number;
   population?: number;
+  hospitalization?: CoronaHospitalization;
 }
