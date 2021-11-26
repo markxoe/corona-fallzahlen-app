@@ -101,19 +101,31 @@ export interface APIGermanyResponseType extends APIGermanyType {
   meta: APIMetaType;
 }
 
-export interface APIStatesResponseType {
-  meta: APIMetaType;
-  data: {
-    [key: string]: APIStateType;
-  };
-}
+//export type APIGermanyResponseType = APIRawReturn<APIGermanyType>;
 
-export interface APIDistrictsResponseType {
-  meta: APIMetaType;
-  data: {
-    [key: string]: APIDistrictType;
-  };
-}
+// export interface APIStatesResponseType {
+//   meta: APIMetaType;
+//   data: {
+//     [key: string]: APIStateType;
+//   };
+// }
+
+export type APIStatesResponseType = APIRawReturn<{
+  [key: string]: APIStateType;
+}>;
+
+// export interface APIDistrictsResponseType {
+//   meta: APIMetaType;
+//   data: {
+//     [key: string]: APIDistrictType;
+//   };
+// }
+
+export type APIDistrictsResponseType = APIRawReturn<{
+  [key: string]: APIDistrictType;
+}>;
+
+export type APIVaccinationsResponseType = APIRawReturn<APIVaccinations>;
 
 export interface APIResponseType<T> {
   data?: T;

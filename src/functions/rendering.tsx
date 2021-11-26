@@ -34,7 +34,7 @@ export const showOrSkeleton = (
 export const numberToStringWithThousands = (input: number): string => {
   if (input >= 1000) {
     let j = input.toFixed(0).split("").reverse();
-    console.log(j);
+    // console.log(j);
     let out = [];
     for (let i = 0; i < j.length; i++) {
       if (i % 3 === 0 && i !== 0) {
