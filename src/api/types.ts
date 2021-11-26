@@ -1,3 +1,4 @@
+//#region RAW API Types
 export interface APIMetaType {
   source: string;
   contact: string;
@@ -97,29 +98,17 @@ export interface APIVaccinations {
   states: any;
 }
 
+//#endregion
+
+//#region API Response Types
+
 export interface APIGermanyResponseType extends APIGermanyType {
   meta: APIMetaType;
 }
 
-//export type APIGermanyResponseType = APIRawReturn<APIGermanyType>;
-
-// export interface APIStatesResponseType {
-//   meta: APIMetaType;
-//   data: {
-//     [key: string]: APIStateType;
-//   };
-// }
-
 export type APIStatesResponseType = APIRawReturn<{
   [key: string]: APIStateType;
 }>;
-
-// export interface APIDistrictsResponseType {
-//   meta: APIMetaType;
-//   data: {
-//     [key: string]: APIDistrictType;
-//   };
-// }
 
 export type APIDistrictsResponseType = APIRawReturn<{
   [key: string]: APIDistrictType;
@@ -130,6 +119,13 @@ export type APIVaccinationsResponseType = APIRawReturn<APIVaccinations>;
 export interface APIResponseType<T> {
   data?: T;
 }
+
+export interface APIRawReturn<T> {
+  data: T;
+  meta: APIMetaType;
+}
+
+//#endregion
 
 export interface APICacheType {
   data?: {
@@ -173,9 +169,4 @@ export interface CoronaData {
   r?: number;
   population?: number;
   hospitalization?: CoronaHospitalization;
-}
-
-export interface APIRawReturn<T> {
-  data: T;
-  meta: APIMetaType;
 }

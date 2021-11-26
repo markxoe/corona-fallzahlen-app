@@ -18,40 +18,17 @@ import {
 export const baseURL = "https://api.cfz.toastbrot.org/";
 export const axiosConfig: AxiosRequestConfig = { timeout: 3000 };
 
-export const getStatesCoronaData = async (): Promise<
-  APIResponseType<CoronaData[]>
-> => {
-  const states = await getStates();
-  if (!states) return {};
-  return { data: convertAllStates(states.data) };
-};
+//#region API Raw functions
 
 export const getStates = () =>
   axios
     .get<APIStatesResponseType>(baseURL + "states", axiosConfig)
     .catch(() => undefined);
 
-export const getDistrictsCoronaData = async (): Promise<
-  APIResponseType<CoronaData[]>
-> => {
-  const districts = await getDistricts();
-  if (!districts) return {};
-  return { data: convertAllDistricts(districts.data) };
-};
-
 export const getDistricts = () =>
   axios
     .get<APIDistrictsResponseType>(baseURL + "districts", axiosConfig)
     .catch(() => undefined);
-
-export const getGermanyCoronaData = async (): Promise<
-  APIResponseType<CoronaData>
-> => {
-  const germany = await getGermany();
-  console.log({ germany });
-  if (!germany) return {};
-  return { data: ConvertGermanyToCoronaData(germany.data) };
-};
 
 export const getGermany = async () => {
   return axios
@@ -65,11 +42,41 @@ export const getVaccinations = async () => {
     .catch(() => undefined);
 };
 
+//#endregion
+
+//#region API Converters
+export const getStatesCoronaData = async (): Promise<
+  APIResponseType<CoronaData[]>
+> => {
+  const states = await getStates();
+  if (!states) return {};
+  return { data: convertAllStates(states.data) };
+};
+
+export const getDistrictsCoronaData = async (): Promise<
+  APIResponseType<CoronaData[]>
+> => {
+  const districts = await getDistricts();
+  if (!districts) return {};
+  return { data: convertAllDistricts(districts.data) };
+};
+
+export const getGermanyCoronaData = async (): Promise<
+  APIResponseType<CoronaData>
+> => {
+  const germany = await getGermany();
+  console.log({ germany });
+  if (!germany) return {};
+  return { data: ConvertGermanyToCoronaData(germany.data) };
+};
+
 export const getMeta = async (): Promise<APIResponseType<APIMetaType>> => {
   const germany = await getGermany();
   if (!germany) return {};
   return { data: germany.data.meta };
 };
+
+//#endregion
 
 export const getCache = async (): Promise<APICacheType> => {
   const germany = await getGermanyCoronaData();
