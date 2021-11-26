@@ -10,9 +10,13 @@ body {
   margin: auto;
 }
 
-@supports (backdrop-filter: blur(0)) {
+.md ion-header {
+  backdrop-filter: blur(20px) saturate(180%);
+  --ion-toolbar-background: #1f1f1fcc !important;
+}
+
+@supports not (backdrop-filter: blur(0)) {
   .md ion-header {
-    backdrop-filter: blur(20px) saturate(180%);
-    --ion-toolbar-background: #1f1f1fcc !important;
+    --ion-toolbar-background: #1f1f1fff !important;
   }
 }
