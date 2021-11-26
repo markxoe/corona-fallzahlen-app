@@ -84,23 +84,11 @@ export const getCache = async (): Promise<APICacheType> => {
   const states = await getStatesCoronaData();
   const meta = await getMeta();
 
-  const statesMap = await getMap("states");
-  const districtsMap = await getMap("districts");
-
-  if (
-    germany.data &&
-    districts.data &&
-    states.data &&
-    meta.data &&
-    statesMap.data &&
-    districtsMap.data
-  )
+  if (germany.data && districts.data && states.data && meta.data)
     return {
       data: {
         coronaData: [germany.data, ...districts.data, ...states.data],
         meta: meta.data,
-        districtsMap: districtsMap.data,
-        statesMap: statesMap.data,
       },
     };
   else return {};

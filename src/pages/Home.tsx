@@ -28,10 +28,12 @@ import { cacheDataFromAPI } from "../functions/data";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
 import { arrowForward, map } from "ionicons/icons";
 import VaccinationCard from "../components/VaccinationCard";
+import { baseURL } from "../api/api";
 
 const PageHome: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
   const [favorites, setFavorites] = useState<CoronaData[]>([]);
+  const [imagesError, setImagesError] = useState(false);
 
   useEffect(() => {
     let _data: CoronaData[] = [];
@@ -111,9 +113,10 @@ const PageHome: React.FC = () => {
                     Landkreise <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                {state.temp.cache.data?.districtsMap ? (
+                {!imagesError ? (
                   <img
-                    src={state.temp.cache.data?.districtsMap}
+                    onError={() => setImagesError(true)}
+                    src={baseURL + "map/districts"}
                     className="lil-img-padding"
                     alt="Corona Landkarte Landkreise"
                   />
@@ -131,9 +134,9 @@ const PageHome: React.FC = () => {
                     Bundesländer <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                {state.temp.cache.data?.statesMap ? (
+                {!imagesError ? (
                   <img
-                    src={state.temp.cache.data?.statesMap}
+                    src={baseURL + "map/states"}
                     className="lil-img-padding"
                     alt="Corona Landkarte Bundesländer"
                   />
@@ -206,7 +209,7 @@ const PageHome: React.FC = () => {
         </IonGrid>
       </IonContent>
       <IonFooter>
-        <IonProgressBar hidden={!state.temp.loading} type="indeterminate" />
+        <IonProgressBar hidden={state.temp.loaded} type="indeterminate" />
       </IonFooter>
     </IonPage>
   );
