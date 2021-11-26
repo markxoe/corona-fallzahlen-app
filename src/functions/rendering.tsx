@@ -20,6 +20,10 @@ export const makeToast = (
   document.body.appendChild(el);
 };
 
+export const displayPercent = (value: number) => {
+  return (value * 100).toFixed(2).replaceAll(".", ",") + " %";
+};
+
 export const showOrSkeleton = (
   whattoshow: any,
   middleware: (input: any) => any = (i) => i

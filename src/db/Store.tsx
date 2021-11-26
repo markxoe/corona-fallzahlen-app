@@ -40,6 +40,9 @@ const reducer = (state: StateType, action: ActionType): StateType => {
     case "setLoaded": {
       return { ...state, dataLoadedFromStore: action.payload };
     }
+
+    case "setTempVaccinations":
+      return { ...state, temp: { ...state.temp, vaccination: action.payload } };
   }
   return state;
 };

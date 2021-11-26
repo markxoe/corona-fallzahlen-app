@@ -27,6 +27,7 @@ import { CoronaData, CoronaDataLocation } from "../api/types";
 import { cacheDataFromAPI } from "../functions/data";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
 import { arrowForward, map } from "ionicons/icons";
+import VaccinationCard from "../components/VaccinationCard";
 
 const PageHome: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -99,6 +100,9 @@ const PageHome: React.FC = () => {
                   (i) => i.location === CoronaDataLocation.GERMANY
                 )}
               />
+            </IonCol>
+            <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
+              <VaccinationCard vaccination={state.temp.vaccination} />
             </IonCol>
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
               <IonCard routerLink="/districts">

@@ -1,4 +1,4 @@
-import { APICacheType } from "../api/types";
+import { APICacheType, APIVaccinations } from "../api/types";
 import { ActionType, StateType } from "./types";
 
 export const ActionSetTempLoading = (loaded: boolean): ActionType => ({
@@ -29,4 +29,11 @@ export const ActionSetState = (state: StateType): ActionType => ({
 export const ActionSetLoaded = (loaded: boolean): ActionType => ({
   type: "setLoaded",
   payload: loaded,
+});
+
+export const ActionSetTempVaccinations = (
+  vaccinations?: APIVaccinations
+): ActionType => ({
+  type: "setTempVaccinations",
+  payload: vaccinations,
 });
