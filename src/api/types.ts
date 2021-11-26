@@ -57,7 +57,7 @@ export interface APIGermanyType {
   hospitalization: CoronaHospitalization;
 }
 
-export interface APIVaccinations {
+export interface APIVaccination {
   administeredVaccinations: number; // Sum of first and second dose
   vaccinated: number; // Number of fist dose
   delta: number; // New first dose vaccinations compared to yesterday
@@ -95,7 +95,10 @@ export interface APIVaccinations {
     secondVaccination: string;
     boosterVaccination: number;
   };
-  states: any;
+}
+
+export interface APIVaccinations extends APIVaccination {
+  states: { [key: string]: APIVaccination };
 }
 
 //#endregion
