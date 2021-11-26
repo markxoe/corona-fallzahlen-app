@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { APICacheType } from "../api/types";
+import { APICacheType, APIVaccinations } from "../api/types";
 
 export interface StateType {
   temp: TempType;
@@ -19,4 +19,5 @@ export interface ActionType {
 export interface TempType {
   cache: APICacheType;
   loading: boolean;
+  vaccination?: APIVaccinations;
 }

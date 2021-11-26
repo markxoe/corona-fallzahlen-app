@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { getCache } from "../api/api";
+import { getCache, getVaccinations } from "../api/api";
 import {
   APIDistrictsResponseType,
   APIDistrictType,
@@ -9,7 +9,11 @@ import {
   CoronaData,
   CoronaDataLocation,
 } from "../api/types";
-import { ActionSetTempCache, ActionSetTempLoading } from "../db/Actions";
+import {
+  ActionSetTempCache,
+  ActionSetTempLoading,
+  ActionSetTempVaccinations,
+} from "../db/Actions";
 import { ActionType } from "../db/types";
 import { makeToast } from "./rendering";
 
@@ -17,6 +21,8 @@ export const cacheDataFromAPI = async (dispatch: Dispatch<ActionType>) => {
   dispatch(ActionSetTempLoading(true));
   const _data = await getCache();
   dispatch(ActionSetTempCache(_data));
+  const vaccination = await getVaccinations();
+  dispatch(ActionSetTempVaccinations(vaccination?.data.data));
   dispatch(ActionSetTempLoading(false));
 
   if (!_data.data)
