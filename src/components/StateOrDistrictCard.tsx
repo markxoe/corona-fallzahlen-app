@@ -129,24 +129,6 @@ const StateOrDistrictCard: React.FC<{
               </p>
             </IonCol>
           </IonRow>
-          {/* <IonRow>
-            <IonCol>Neue Fälle</IonCol>
-            <IonCol className="ion-text-end">
-              {showOrSkeleton(
-                stateordistrict?.delta.cases,
-                numberToStringWithThousands
-              )}
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>Neue Todesfälle</IonCol>
-            <IonCol className="ion-text-end">
-              {showOrSkeleton(
-                stateordistrict?.delta.deaths,
-                numberToStringWithThousands
-              )}
-            </IonCol>
-          </IonRow> */}
           {stateordistrict?.r ? (
             <IonRow>
               <IonCol>R Wert</IonCol>

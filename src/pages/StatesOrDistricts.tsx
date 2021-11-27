@@ -39,7 +39,7 @@ const PageStatesOrDistricts: React.FC<{
       ...statesOrDistrictsDataRender,
       ...statesOrDistrictsData.slice(
         statesOrDistrictsDataRender.length,
-        statesOrDistrictsDataRender.length + 5
+        statesOrDistrictsDataRender.length + loadMoreCount
       ),
     ]);
     setInfinityDisabled(

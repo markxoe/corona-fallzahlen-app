@@ -65,7 +65,6 @@ export const getGermanyCoronaData = async (): Promise<
   APIResponseType<CoronaData>
 > => {
   const germany = await getGermany();
-  console.log({ germany });
   if (!germany) return {};
   return { data: ConvertGermanyToCoronaData(germany.data) };
 };
