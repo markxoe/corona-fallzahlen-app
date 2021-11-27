@@ -15,6 +15,7 @@ const PushNotificationRegister: FC = ({ children }) => {
             importance: 3,
             name: "Updates",
             description: "Benachrichtigungen über verfügbare Updates",
+            visibility: 1,
           });
           PushNotifications.register();
         })
