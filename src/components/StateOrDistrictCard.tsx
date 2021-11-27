@@ -94,24 +94,42 @@ const StateOrDistrictCard: React.FC<{
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonCol>Fälle gesamt</IonCol>
+            <IonCol>Fälle</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(
-                stateordistrict?.cases,
-                numberToStringWithThousands
-              )}
+              <p>
+                {showOrSkeleton(
+                  stateordistrict?.cases,
+                  numberToStringWithThousands
+                )}
+              </p>
+              <p>
+                +{" "}
+                {showOrSkeleton(
+                  stateordistrict?.delta.cases,
+                  numberToStringWithThousands
+                )}
+              </p>
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonCol>Todesfälle gesamt</IonCol>
+            <IonCol>Todesfälle</IonCol>
             <IonCol className="ion-text-end">
-              {showOrSkeleton(
-                stateordistrict?.deaths,
-                numberToStringWithThousands
-              )}
+              <p>
+                {showOrSkeleton(
+                  stateordistrict?.deaths,
+                  numberToStringWithThousands
+                )}
+              </p>
+              <p>
+                +{" "}
+                {showOrSkeleton(
+                  stateordistrict?.delta.deaths,
+                  numberToStringWithThousands
+                )}
+              </p>
             </IonCol>
           </IonRow>
-          <IonRow>
+          {/* <IonRow>
             <IonCol>Neue Fälle</IonCol>
             <IonCol className="ion-text-end">
               {showOrSkeleton(
@@ -128,7 +146,7 @@ const StateOrDistrictCard: React.FC<{
                 numberToStringWithThousands
               )}
             </IonCol>
-          </IonRow>
+          </IonRow> */}
           {stateordistrict?.r ? (
             <IonRow>
               <IonCol>R Wert</IonCol>
