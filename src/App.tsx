@@ -29,27 +29,28 @@ import { AppContextProvider } from "./db/Store";
 import PageHome from "./pages/Home";
 import PageStatesOrDistricts from "./pages/StatesOrDistricts";
 import Loader from "./db/loadingComponent";
+import PushNotificationRegister from "./components/PushNotificationRegister";
 
 const App: React.FC = () => (
   <AppContextProvider>
-    <Loader>
-      <IonApp>
-        <IonReactRouter>
-          <IonRouterOutlet>
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
-            <Route exact path="/home" component={PageHome} />
-            <Route exact path="/states">
-              <PageStatesOrDistricts statesOrDistricts="states" />
-            </Route>
-            <Route exact path="/districts">
-              <PageStatesOrDistricts statesOrDistricts="districts" />
-            </Route>
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonApp>
-    </Loader>
+    <Loader />
+    <PushNotificationRegister />
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route exact path="/home" component={PageHome} />
+          <Route exact path="/states">
+            <PageStatesOrDistricts statesOrDistricts="states" />
+          </Route>
+          <Route exact path="/districts">
+            <PageStatesOrDistricts statesOrDistricts="districts" />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
   </AppContextProvider>
 );
 
