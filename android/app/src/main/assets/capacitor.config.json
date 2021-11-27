@@ -7,6 +7,13 @@
 			"launchShowDuration": 2000,
 			"androidScaleType": "FIT_CENTER",
 			"backgroundColor": "#000000"
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"alert",
+				"badge",
+				"sound"
+			]
 		}
 	}
 }
