@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { getCache } from "../api/api";
+import { getCache, getVaccinations } from "../api/api";
 import {
   APIDistrictsResponseType,
   APIDistrictType,
@@ -9,20 +9,23 @@ import {
   CoronaData,
   CoronaDataLocation,
 } from "../api/types";
-import { ActionSetTempCache, ActionSetTempLoading } from "../db/Actions";
+import {
+  ActionSetTempCache,
+  ActionSetTempLoaded,
+  ActionSetTempVaccinations,
+} from "../db/Actions";
 import { ActionType } from "../db/types";
 import { makeToast } from "./rendering";
 
 export const cacheDataFromAPI = async (dispatch: Dispatch<ActionType>) => {
-  dispatch(ActionSetTempLoading(true));
   const _data = await getCache();
   dispatch(ActionSetTempCache(_data));
-  dispatch(ActionSetTempLoading(false));
+  const vaccination = await getVaccinations();
+  dispatch(ActionSetTempVaccinations(vaccination?.data.data));
+  dispatch(ActionSetTempLoaded(true));
 
   if (!_data.data)
-    makeToast("Fehler beim Laden, versuch's später wieder", [
-      { text: "Ok schade" },
-    ]);
+    makeToast("Fehler beim Laden, versuch's später nochmal", [{ text: "Ok" }]);
 };
 
 export const ConvertStateToCoronaData = (state: APIStateType): CoronaData => {
@@ -39,6 +42,7 @@ export const ConvertStateToCoronaData = (state: APIStateType): CoronaData => {
     id: state.abbreviation,
     location: CoronaDataLocation.STATE,
     population: state.population,
+    hospitalization: state.hospitalization,
   };
 };
 
@@ -77,6 +81,7 @@ export const ConvertGermanyToCoronaData = (
     id: "de",
     location: CoronaDataLocation.GERMANY,
     r: germany.r.value,
+    hospitalization: germany.hospitalization,
   };
 };
 

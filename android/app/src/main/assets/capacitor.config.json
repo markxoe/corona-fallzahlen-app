@@ -1,15 +1,19 @@
 {
-  "appId": "org.toastbrot.covidcases",
-  "appName": "Einfache Fallzahlen",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "build",
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 2000,
-      "androidScaleType": "FIT_CENTER",
-      "backgroundColor": "#000000"
-    }
-  },
-  "cordova": {}
+	"appId": "org.toastbrot.covidcases",
+	"appName": "Einfache Fallzahlen",
+	"webDir": "build",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 2000,
+			"androidScaleType": "FIT_CENTER",
+			"backgroundColor": "#000000"
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"alert",
+				"badge",
+				"sound"
+			]
+		}
+	}
 }

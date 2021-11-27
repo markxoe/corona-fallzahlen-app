@@ -20,6 +20,10 @@ export const makeToast = (
   document.body.appendChild(el);
 };
 
+export const displayPercent = (value: number) => {
+  return (value * 100).toFixed(2).replaceAll(".", ",") + " %";
+};
+
 export const showOrSkeleton = (
   whattoshow: any,
   middleware: (input: any) => any = (i) => i
@@ -34,7 +38,6 @@ export const showOrSkeleton = (
 export const numberToStringWithThousands = (input: number): string => {
   if (input >= 1000) {
     let j = input.toFixed(0).split("").reverse();
-    console.log(j);
     let out = [];
     for (let i = 0; i < j.length; i++) {
       if (i % 3 === 0 && i !== 0) {

@@ -25,13 +25,15 @@ import { showOrSkeleton } from "../functions/rendering";
 import packageJSON from "../../package.json";
 import { CoronaData, CoronaDataLocation } from "../api/types";
 import { cacheDataFromAPI } from "../functions/data";
-import { ActionRemoveFavorite } from "../db/Actions";
 import StateOrDistrictCard from "../components/StateOrDistrictCard";
 import { arrowForward, map } from "ionicons/icons";
+import VaccinationCard from "../components/VaccinationCard";
+import { baseURL } from "../api/api";
 
 const PageHome: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
   const [favorites, setFavorites] = useState<CoronaData[]>([]);
+  const [imagesError, setImagesError] = useState(false);
 
   useEffect(() => {
     let _data: CoronaData[] = [];
@@ -89,14 +91,8 @@ const PageHome: React.FC = () => {
             </IonCol>
 
             {favorites.map((i) => (
-              <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
-                <StateOrDistrictCard
-                  stateordistrict={i}
-                  isFavorite={true}
-                  toggleFavorite={() =>
-                    dispatch(ActionRemoveFavorite(i.id ?? ""))
-                  }
-                />
+              <IonCol key={i.id} size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
+                <StateOrDistrictCard stateordistrict={i} />
               </IonCol>
             ))}
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
@@ -108,15 +104,19 @@ const PageHome: React.FC = () => {
               />
             </IonCol>
             <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
+              <VaccinationCard vaccination={state.temp.vaccination} />
+            </IonCol>
+            <IonCol size="auto" sizeLg="4" sizeSm="6" sizeXs="12">
               <IonCard routerLink="/districts">
                 <IonCardHeader>
                   <IonCardTitle>
                     Landkreise <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                {state.temp.cache.data ? (
+                {!imagesError ? (
                   <img
-                    src={state.temp.cache.data?.districtsMap ?? ""}
+                    onError={() => setImagesError(true)}
+                    src={baseURL + "map/districts"}
                     className="lil-img-padding"
                     alt="Corona Landkarte Landkreise"
                   />
@@ -134,9 +134,9 @@ const PageHome: React.FC = () => {
                     Bundesländer <IonIcon icon={arrowForward} size="small" />
                   </IonCardTitle>
                 </IonCardHeader>
-                {state.temp.cache.data ? (
+                {!imagesError ? (
                   <img
-                    src={state.temp.cache.data?.statesMap ?? ""}
+                    src={baseURL + "map/states"}
                     className="lil-img-padding"
                     alt="Corona Landkarte Bundesländer"
                   />
@@ -209,7 +209,7 @@ const PageHome: React.FC = () => {
         </IonGrid>
       </IonContent>
       <IonFooter>
-        <IonProgressBar hidden={!state.temp.loading} type="indeterminate" />
+        <IonProgressBar hidden={state.temp.loaded} type="indeterminate" />
       </IonFooter>
     </IonPage>
   );
