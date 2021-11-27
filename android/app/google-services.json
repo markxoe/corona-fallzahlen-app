@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "96621845142",
+    "project_id": "corona-fallzahlen-b1c06",
+    "storage_bucket": "corona-fallzahlen-b1c06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96621845142:android:54f125f43858d671a0c0b7",
+        "android_client_info": {
+          "package_name": "org.toastbrot.covidcases"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96621845142-38dqeobjq77dmlk7hvc7cgbfighiljf4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQrOQMgt-DOucpP9SVksg6wAZvR2pHOck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96621845142-38dqeobjq77dmlk7hvc7cgbfighiljf4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96621845142:android:bfcaa1002ef682dba0c0b7",
+        "android_client_info": {
+          "package_name": "org.toastbrot.covidcases.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96621845142-38dqeobjq77dmlk7hvc7cgbfighiljf4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQrOQMgt-DOucpP9SVksg6wAZvR2pHOck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96621845142-38dqeobjq77dmlk7hvc7cgbfighiljf4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
