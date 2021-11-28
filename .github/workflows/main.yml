@@ -139,7 +139,7 @@ jobs:
           keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PWD }}
 
       - name: Save serviceaccountjson
-        run: echo '${{ secrets.ANDROID_SERVICE_JSON }}'' > service_account.json
+        run: echo '${{ secrets.ANDROID_SERVICE_JSON }}' > service_account.json
 
       - name: Upload to Google Play
         if: github.event.inputs.deploy-prod-android-upload != 'No'
