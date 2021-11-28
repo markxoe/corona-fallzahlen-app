@@ -47,7 +47,7 @@ jobs:
           path: build/
 
   deploy-web-dev:
-    if: (github.ref == 'refs/heads/dev') || github.event.inputs.deploy-dev == 'Yes'
+    if: (github.ref == 'refs/heads/dev') || (github.ref == 'refs/heads/master') || github.event.inputs.deploy-dev == 'Yes'
     name: 🚀 Deploy Web dev
     needs: test-n-build
     runs-on: ubuntu-latest
