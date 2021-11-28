@@ -1,5 +1,24 @@
 name: Test, build and deploy
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - dev
+  workflow_dispatch:
+    inputs:
+      deploy-dev:
+        description: If "Yes", deploy web dev
+        required: false
+      deploy-prod-web:
+        description: If "Yes", deploy web production
+        required: false
+      deploy-prod-android:
+        description: If "Yes", deploy android production
+        required: false
+      deploy-prod-android-upload:
+        description: If "No", don't upload to Google Play if dndroid depolyment
+        required: false
+        default: No
 jobs:
   test-n-build:
     name: 👌 Test and 👷‍♂️ Build
@@ -28,6 +47,7 @@ jobs:
           path: build/
 
   deploy-web-dev:
+    if: (github.ref == 'refs/heads/dev') || github.event.inputs.deploy-dev == 'Yes'
     name: 🚀 Deploy Web dev
     needs: test-n-build
     runs-on: ubuntu-latest
@@ -50,7 +70,7 @@ jobs:
           local-dir: build/
 
   deploy-web-master:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' || github.event.inputs.deploy-prod-web == 'Yes'
     name: 🚀 Deploy Web master
     needs: test-n-build
     runs-on: ubuntu-latest
@@ -71,3 +91,62 @@ jobs:
           port: ${{ secrets.FTP_PORT }}
           server-dir: ${{ secrets.FTP_TARGET }}
           local-dir: build/
+
+  deploy-android-production:
+    name: 🚀 Deploy Android Production
+    if: startsWith(github.ref, 'refs/tags') || github.event.inputs.deploy-prod-android == 'Yes'
+    runs-on: ubuntu-latest
+    needs: test-n-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Installing
+        run: npm ci
+
+      - name: Build Web
+        run: npm run build
+
+      - name: Sync Android
+        run: npx cap sync android
+
+        # Run in android folder
+      - run: chmod +x gradlew
+        working-directory: android
+
+        # Run in android folder
+      - name: Build android
+        run: ./gradlew bundleRelease
+        working-directory: android
+
+      - uses: r0adkll/sign-android-release@v1
+        name: Sign bundle
+        id: sign_app
+        with:
+          releaseDirectory: android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          alias: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PWD }}
+
+      - name: Save serviceaccountjson
+        run: echo '${{ secrets.ANDROID_SERVICE_JSON }}'' > service_account.json
+
+      - name: Upload to Google Play
+        if: github.event.inputs.deploy-prod-android-upload != 'No'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: org.toastbrot.covidcases
+          releaseFile: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          track: production
+          whatsNewDirectory: whatsnew
+          status: draft
