@@ -172,7 +172,7 @@ const PageHome: React.FC = () => {
                       <IonCol>Source Code zur API</IonCol>
                       <IonCol className="ion-text-end">
                         <a href={state.temp.cache.data?.meta.info}>
-                          {showOrSkeleton(state.temp.cache.data?.meta.info)}
+                          Zum Projekt
                         </a>
                       </IonCol>
                     </IonRow>
