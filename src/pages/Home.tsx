@@ -196,9 +196,16 @@ const PageHome: React.FC = () => {
                 <IonCardContent>
                   <p>
                     Fehler gefunden? Verbesserungsvorschläge? Diese App ist
-                    OpenSource!{" "}
+                    OpenSource!
+                  </p>
+                  <p>
                     <a href="https://github.com/markxoe/corona-fallzahlen-app">
                       Zum Projekt
+                    </a>
+                  </p>
+                  <p>
+                    <a href="https://toastbrot.org/corona-fallzahlen-datenschutz/">
+                      Zum Datenschutz
                     </a>
                   </p>
                   <p>App Version: {packageJSON.version}</p>
